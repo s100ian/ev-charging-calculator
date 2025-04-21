@@ -5,6 +5,8 @@ interface CarInfoProps {
   setUsableCapacity: (value: number) => void;
   consumption: number;
   setConsumption: (value: number) => void;
+  currentSoC: number;
+  setCurrentSoC: (value: number) => void;
 }
 
 const CarInfo: React.FC<CarInfoProps> = ({
@@ -12,6 +14,8 @@ const CarInfo: React.FC<CarInfoProps> = ({
   setUsableCapacity,
   consumption,
   setConsumption,
+  currentSoC,
+  setCurrentSoC,
 }) => {
   const handleDecrement = (
     setter: (value: number) => void,
@@ -87,6 +91,33 @@ const CarInfo: React.FC<CarInfoProps> = ({
           <button
             className="control-button"
             onClick={() => handleIncrement(setConsumption, consumption, 50)}
+          >
+            +
+          </button>
+        </div>
+      </div>
+      <div className="slider-group">
+        <label className="slider-label">
+          Current SoC (%): <span className="slider-value">{currentSoC}</span>
+        </label>
+        <div className="slider-controls">
+          <button
+            className="control-button"
+            onClick={() => handleDecrement(setCurrentSoC, currentSoC, 0)}
+          >
+            -
+          </button>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={currentSoC}
+            onChange={(e) => setCurrentSoC(parseInt(e.target.value, 10))}
+            className="slider-input"
+          />
+          <button
+            className="control-button"
+            onClick={() => handleIncrement(setCurrentSoC, currentSoC, 100)}
           >
             +
           </button>

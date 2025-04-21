@@ -5,8 +5,6 @@ interface ChargingDetailsProps {
   setVolts: (value: number) => void;
   duration: number;
   setDuration: (value: number) => void;
-  currentSoC: number;
-  setCurrentSoC: (value: number) => void;
   amps: number;
   setAmps: (value: number) => void;
 }
@@ -16,8 +14,6 @@ const ChargingDetails: React.FC<ChargingDetailsProps> = ({
   setVolts,
   duration,
   setDuration,
-  currentSoC,
-  setCurrentSoC,
   amps,
   setAmps,
 }) => {
@@ -127,33 +123,6 @@ const ChargingDetails: React.FC<ChargingDetailsProps> = ({
             className="slider-input"
           />
           <button className="control-button" onClick={handleDurationIncrement}>
-            +
-          </button>
-        </div>
-      </div>
-      <div className="slider-group">
-        <label className="slider-label">
-          Current SoC (%): <span className="slider-value">{currentSoC}</span>
-        </label>
-        <div className="slider-controls">
-          <button
-            className="control-button"
-            onClick={() => handleDecrement(setCurrentSoC, currentSoC, 0)}
-          >
-            -
-          </button>
-          <input
-            type="range"
-            min="0"
-            max="100"
-            value={currentSoC}
-            onChange={(e) => setCurrentSoC(parseInt(e.target.value, 10))}
-            className="slider-input"
-          />
-          <button
-            className="control-button"
-            onClick={() => handleIncrement(setCurrentSoC, currentSoC, 100)}
-          >
             +
           </button>
         </div>

@@ -19,15 +19,15 @@ function App() {
   const [consumption, setConsumption] = useState(() =>
     getInitialState("consumption", 18)
   ); // kWh/100km
+  const [currentSoC, setCurrentSoC] = useState(() =>
+    getInitialState("currentSoC", 50)
+  ); // %
 
   // Charging Details State - Initialize from localStorage or use defaults
   const [volts, setVolts] = useState(() => getInitialState("volts", 230)); // V
   const [duration, setDuration] = useState(() =>
     getInitialState("duration", 8)
   ); // hours
-  const [currentSoC, setCurrentSoC] = useState(() =>
-    getInitialState("currentSoC", 50)
-  ); // %
   const [amps, setAmps] = useState(() => getInitialState("amps", 10)); // A
 
   // Results State
@@ -78,14 +78,14 @@ function App() {
         setUsableCapacity={setUsableCapacity}
         consumption={consumption}
         setConsumption={setConsumption}
+        currentSoC={currentSoC} // Pass currentSoC
+        setCurrentSoC={setCurrentSoC} // Pass setCurrentSoC
       />
       <ChargingDetails
         volts={volts}
         setVolts={setVolts}
         duration={duration}
         setDuration={setDuration}
-        currentSoC={currentSoC}
-        setCurrentSoC={setCurrentSoC}
         amps={amps}
         setAmps={setAmps}
       />
