@@ -1,0 +1,95 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1rem; /* Adjusted padding for mobile */
+  text-align: center;
+}
+
+.calculator-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 500px; /* Limit width on larger screens */
+  margin: 0 auto; /* Center container */
+}
+
+.input-section, .results-section {
+  border: 1px solid #555;
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: #2a2a2a; /* Slightly lighter background for sections */
+}
+
+.input-section h2, .results-section h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: #a0a0ff; /* Accent color for headings */
+  font-size: 1.3em;
+}
+
+.slider-group {
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.slider-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.9em;
+  color: #ccc;
+}
+
+.slider-group input[type="range"] {
+  width: 100%;
+  cursor: pointer;
+}
+
+.results-section {
+  background-color: #1f1f1f; /* Darker background for results */
+}
+
+.result-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #333;
+  font-size: 0.95em;
+}
+
+.result-item:last-child {
+  border-bottom: none;
+}
+
+.result-item span {
+  color: #bbb;
+}
+
+.result-item strong {
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Remove default Vite/React logos and styles if not needed */
+.logo, .logo.react, .card, .read-the-docs {
+  display: none;
+}
+
+/* Ensure body takes full height for centering */
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start; /* Align items to top on mobile */
+  padding-top: 1rem; /* Add some top padding */
+}
+
+/* Media query for larger screens if needed */
+@media (min-width: 600px) {
+  #root {
+    padding: 2rem;
+  }
+  body {
+     align-items: center; /* Center vertically on larger screens */
+     padding-top: 0;
+  }
+}
