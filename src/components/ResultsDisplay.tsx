@@ -6,6 +6,7 @@ interface ResultsDisplayProps {
   chargingSpeedPercent: number;
   chargingSpeedKm: number;
   rangePerSession: number;
+  totalRange: number;
 }
 
 const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
@@ -14,6 +15,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
   chargingSpeedPercent,
   chargingSpeedKm,
   rangePerSession,
+  totalRange,
 }) => {
   return (
     <div>
@@ -23,6 +25,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
       <p>Charging speed: {chargingSpeedPercent.toFixed(1)} %/h</p>
       <p>Charging speed: {chargingSpeedKm.toFixed(1)} km/h</p>
       <p>Range per charging session: {rangePerSession.toFixed(0)} km</p>
+      <p>Total range: {totalRange.toFixed(0)} km</p>
     </div>
   );
 };
