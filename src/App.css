@@ -117,27 +117,37 @@
   background: linear-gradient(145deg, #1f1f3f, #14142a); /* Darker gradient for results */
 }
 
-.result-item {
+.results-grid { /* New grid styles */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Responsive grid */
+  gap: 1rem; /* Gap between tiles */
+  margin-top: 1rem; /* Space below the heading */
+}
+
+.result-tile { /* New tile styles */
+  background-color: #2a2a4a; /* Tile background */
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  border: 1px solid #3a3a5a;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
   display: flex;
-  justify-content: space-between;
-  align-items: center; /* Align items vertically */
-  padding: 0.8rem 0; /* Increased padding */
-  border-bottom: 1px solid #3a3a5a; /* Adjusted border color */
-  font-size: 1em;
+  flex-direction: column; /* Stack label and value vertically */
+  justify-content: center;
+  align-items: center;
+  min-height: 80px; /* Ensure tiles have some height */
 }
 
-.result-item:last-child {
-  border-bottom: none;
+.result-tile span {
+  color: #c0c0ff; /* Lighter text color for label */
+  font-size: 0.9em;
+  margin-bottom: 0.4rem; /* Space between label and value */
 }
 
-.result-item span {
-  color: #c0c0ff; /* Lighter text color */
-}
-
-.result-item strong {
+.result-tile strong {
   color: #ffffff;
   font-weight: 600;
-  font-size: 1.1em; /* Slightly larger result value */
+  font-size: 1.2em; /* Larger result value */
 }
 
 /* Remove default Vite/React logos and styles if not needed */

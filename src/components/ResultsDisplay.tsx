@@ -19,44 +19,47 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
 }) => {
   return (
     <div className="results-section">
-      {" "}
-      {/* Added results-section class */}
       <h2>Results</h2>
-      <p className="result-item">
+      <div className="results-grid">
         {" "}
-        {/* Added result-item class */}
-        <span>SoC after charging:</span>{" "}
-        <strong>{socAfterCharging.toFixed(0)} %</strong>
-      </p>
-      <p className="result-item">
-        {" "}
-        {/* Added result-item class */}
-        <span>Charging power:</span>{" "}
-        <strong>{chargingPower.toFixed(2)} kW</strong>
-      </p>
-      <p className="result-item">
-        {" "}
-        {/* Added result-item class */}
-        <span>Charging speed:</span>{" "}
-        <strong>{chargingSpeedPercent.toFixed(1)} %/h</strong>
-      </p>
-      <p className="result-item">
-        {" "}
-        {/* Added result-item class */}
-        <span>Charging speed:</span>{" "}
-        <strong>{chargingSpeedKm.toFixed(1)} km/h</strong>
-      </p>
-      <p className="result-item">
-        {" "}
-        {/* Added result-item class */}
-        <span>Range per charging session:</span>{" "}
-        <strong>{rangePerSession.toFixed(0)} km</strong>
-      </p>
-      <p className="result-item">
-        {" "}
-        {/* Added result-item class */}
-        <span>Total range:</span> <strong>{totalRange.toFixed(0)} km</strong>
-      </p>
+        {/* Added grid container */}
+        <div className="result-tile">
+          {" "}
+          {/* Changed p to div, added class */}
+          <span>SoC after charging</span>
+          <strong>{socAfterCharging.toFixed(0)} %</strong>
+        </div>
+        <div className="result-tile">
+          {" "}
+          {/* Changed p to div, added class */}
+          <span>Charging power</span>
+          <strong>{chargingPower.toFixed(2)} kW</strong>
+        </div>
+        <div className="result-tile">
+          {" "}
+          {/* Changed p to div, added class */}
+          <span>Charging speed</span>
+          <strong>{chargingSpeedPercent.toFixed(1)} %/h</strong>
+        </div>
+        <div className="result-tile">
+          {" "}
+          {/* Changed p to div, added class */}
+          <span>Charging speed</span>
+          <strong>{chargingSpeedKm.toFixed(1)} km/h</strong>
+        </div>
+        <div className="result-tile">
+          {" "}
+          {/* Changed p to div, added class */}
+          <span>Range per session</span>
+          <strong>{rangePerSession.toFixed(0)} km</strong>
+        </div>
+        <div className="result-tile">
+          {" "}
+          {/* Changed p to div, added class */}
+          <span>Total range</span>
+          <strong>{totalRange.toFixed(0)} km</strong>
+        </div>
+      </div>
     </div>
   );
 };
