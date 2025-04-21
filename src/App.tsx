@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import packageJson from "../package.json"; // Import package.json
 import "./App.css";
 import CarInfo from "./components/CarInfo";
 import ChargingDetails from "./components/ChargingDetails";
@@ -90,6 +91,8 @@ function App() {
         chargingSpeedKm={chargingSpeedKm}
         rangePerSession={rangePerSession}
       />
+      <div className="app-version">v{packageJson.version}</div>{" "}
+      {/* Add version display */}
     </>
   );
 }

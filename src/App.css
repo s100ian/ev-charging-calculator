@@ -115,3 +115,11 @@ body {
      padding-top: 0;
   }
 }
+
+.app-version {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  font-size: 0.75rem; /* Small font size */
+  color: #888; /* Optional: Dim color */
+}
