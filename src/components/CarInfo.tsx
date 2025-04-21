@@ -30,12 +30,15 @@ const CarInfo: React.FC<CarInfoProps> = ({
   };
 
   return (
-    <div>
+    <div className="input-section car-info-container">
       <h2>Car Information</h2>
       <div className="slider-group">
-        <label>Usable battery capacity (kWh): {usableCapacity}</label>
+        <label className="slider-label">
+          Usable battery capacity (kWh): {usableCapacity}
+        </label>
         <div className="slider-controls">
           <button
+            className="control-button"
             onClick={() =>
               handleDecrement(setUsableCapacity, usableCapacity, 5)
             }
@@ -48,8 +51,10 @@ const CarInfo: React.FC<CarInfoProps> = ({
             max="200"
             value={usableCapacity}
             onChange={(e) => setUsableCapacity(parseInt(e.target.value, 10))}
+            className="slider-input"
           />
           <button
+            className="control-button"
             onClick={() =>
               handleIncrement(setUsableCapacity, usableCapacity, 200)
             }
@@ -59,9 +64,12 @@ const CarInfo: React.FC<CarInfoProps> = ({
         </div>
       </div>
       <div className="slider-group">
-        <label>Consumption (kWh/100km): {consumption}</label>
+        <label className="slider-label">
+          Consumption (kWh/100km): {consumption}
+        </label>
         <div className="slider-controls">
           <button
+            className="control-button"
             onClick={() => handleDecrement(setConsumption, consumption, 5)}
           >
             -
@@ -72,8 +80,10 @@ const CarInfo: React.FC<CarInfoProps> = ({
             max="50"
             value={consumption}
             onChange={(e) => setConsumption(parseInt(e.target.value, 10))}
+            className="slider-input"
           />
           <button
+            className="control-button"
             onClick={() => handleIncrement(setConsumption, consumption, 50)}
           >
             +

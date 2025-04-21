@@ -1,90 +1,129 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 1rem; /* Adjusted padding for mobile */
+  padding: 1rem;
   text-align: center;
 }
 
 .calculator-container {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem; /* Increased gap */
   width: 100%;
-  max-width: 500px; /* Limit width on larger screens */
-  margin: 0 auto; /* Center container */
+  max-width: 600px; /* Slightly wider max-width */
+  margin: 0 auto;
 }
 
-.input-section, .results-section {
-  border: 1px solid #555;
-  border-radius: 8px;
-  padding: 1rem;
-  background-color: #2a2a2a; /* Slightly lighter background for sections */
+/* Updated section styles */
+.input-section,
+.results-section {
+  border: none; /* Remove border */
+  border-radius: 12px; /* Smoother corners */
+  padding: 1.5rem;
+  background: linear-gradient(145deg, #2c2c54, #1a1a3a); /* Gradient background */
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3), -5px -5px 15px rgba(50, 50, 90, 0.1); /* Subtle shadow */
 }
 
-.input-section h2, .results-section h2 {
+.input-section h2,
+.results-section h2 {
   margin-top: 0;
-  margin-bottom: 1rem;
-  color: #a0a0ff; /* Accent color for headings */
-  font-size: 1.3em;
+  margin-bottom: 1.5rem; /* Increased margin */
+  color: #8a8aff; /* Brighter accent color */
+  font-size: 1.4em;
+  font-weight: 600;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Text shadow for depth */
 }
 
 .slider-group {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem; /* Increased margin */
   text-align: left;
 }
 
-.slider-group label {
+/* Updated label styles */
+.slider-label {
   display: block;
-  margin-bottom: 0.5rem;
-  font-size: 0.9em;
-  color: #ccc;
+  margin-bottom: 0.8rem; /* Increased margin */
+  font-size: 1em; /* Slightly larger font */
+  color: #e0e0ff; /* Lighter label color */
+  font-weight: 500;
 }
 
-.slider-controls { /* New style for the controls wrapper */
+.slider-controls {
   display: flex;
   align-items: center;
-  gap: 0.5rem; /* Add space between buttons and slider */
+  gap: 0.8rem; /* Increased gap */
 }
 
-.slider-controls input[type="range"] { /* Style slider inside the controls wrapper */
-  flex-grow: 1; /* Allow slider to take available space */
-  width: auto; /* Override previous width if any */
+/* Updated slider input styles */
+.slider-input {
+  flex-grow: 1;
+  width: auto;
   cursor: pointer;
+  height: 12px; /* Slightly thicker */
+  background: #444466; /* Darker track */
+  border-radius: 6px;
+  appearance: none; /* Override default look */
+  -webkit-appearance: none;
 }
 
-.slider-controls button { /* Adjust button styles */
-  padding: 0.2em 0.5em; /* Slightly adjust padding */
-  font-size: 0.8em; /* Slightly adjust font size */
-  margin: 0; /* Remove margin */
-  min-width: 25px; /* Adjust min-width */
-  flex-shrink: 0; /* Prevent buttons from shrinking */
-}
-
-input[type="range"] {
-  height: 10px; /* Increase height for a bigger slider track */
+.slider-input::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  height: 24px;
+  width: 24px;
+  background: #8a8aff; /* Accent color thumb */
+  border-radius: 50%;
   cursor: pointer;
+  box-shadow: 0 0 5px rgba(138, 138, 255, 0.5); /* Thumb glow */
+  margin-top: -6px; /* Center thumb vertically */
 }
 
-input[type="range"]::-webkit-slider-thumb {
-  height: 20px; /* Make thumb taller */
-  width: 20px; /* Make thumb wider */
+.slider-input::-moz-range-thumb {
+  height: 24px;
+  width: 24px;
+  background: #8a8aff;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none; /* Remove default border */
+  box-shadow: 0 0 5px rgba(138, 138, 255, 0.5);
 }
 
-input[type="range"]::-moz-range-thumb {
-  height: 20px; /* Make thumb taller */
-  width: 20px; /* Make thumb wider */
+/* Updated control button styles */
+.control-button {
+  padding: 0.4em 0.8em;
+  font-size: 1em;
+  margin: 0;
+  min-width: 35px;
+  flex-shrink: 0;
+  background-color: #4a4a7a; /* Button background */
+  color: #e0e0ff; /* Button text color */
+  border: 1px solid #6a6aaf; /* Button border */
+  border-radius: 6px;
+  transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
+.control-button:hover {
+  background-color: #5a5a8a; /* Hover background */
+  border-color: #8a8aff;
+}
+
+.control-button:active {
+  background-color: #3a3a6a; /* Active background */
+  transform: scale(0.95); /* Click effect */
+}
+
+/* Updated results section specific styles */
 .results-section {
-  background-color: #1f1f1f; /* Darker background for results */
+  background: linear-gradient(145deg, #1f1f3f, #14142a); /* Darker gradient for results */
 }
 
 .result-item {
   display: flex;
   justify-content: space-between;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid #333;
-  font-size: 0.95em;
+  align-items: center; /* Align items vertically */
+  padding: 0.8rem 0; /* Increased padding */
+  border-bottom: 1px solid #3a3a5a; /* Adjusted border color */
+  font-size: 1em;
 }
 
 .result-item:last-child {
@@ -92,16 +131,20 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .result-item span {
-  color: #bbb;
+  color: #c0c0ff; /* Lighter text color */
 }
 
 .result-item strong {
-  color: #fff;
+  color: #ffffff;
   font-weight: 600;
+  font-size: 1.1em; /* Slightly larger result value */
 }
 
 /* Remove default Vite/React logos and styles if not needed */
-.logo, .logo.react, .card, .read-the-docs {
+.logo,
+.logo.react,
+.card,
+.read-the-docs {
   display: none;
 }
 
@@ -111,6 +154,7 @@ body {
   display: flex;
   align-items: flex-start; /* Align items to top on mobile */
   padding-top: 1rem; /* Add some top padding */
+  background: #1e1e2f; /* Darker overall background */
 }
 
 /* Media query for larger screens if needed */
@@ -119,8 +163,8 @@ body {
     padding: 2rem;
   }
   body {
-     align-items: center; /* Center vertically on larger screens */
-     padding-top: 0;
+    align-items: center; /* Center vertically on larger screens */
+    padding-top: 0;
   }
 }
 
@@ -129,5 +173,5 @@ body {
   bottom: 10px;
   right: 10px;
   font-size: 0.75rem; /* Small font size */
-  color: #888; /* Optional: Dim color */
+  color: #aaa; /* Adjusted color */
 }

@@ -69,7 +69,9 @@ function App() {
   }, [usableCapacity, consumption, volts, duration, currentSoC, amps]);
 
   return (
-    <>
+    <div className="calculator-container">
+      {" "}
+      {/* Wrap components in container */}
       <h1>EV Charging Calculator</h1>
       <CarInfo
         usableCapacity={usableCapacity}
@@ -97,7 +99,7 @@ function App() {
       />
       <div className="app-version">v{packageJson.version}</div>{" "}
       {/* Add version display */}
-    </>
+    </div>
   );
 }
 

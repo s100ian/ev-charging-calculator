@@ -18,14 +18,45 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
   totalRange,
 }) => {
   return (
-    <div>
+    <div className="results-section">
+      {" "}
+      {/* Added results-section class */}
       <h2>Results</h2>
-      <p>SoC after charging: {socAfterCharging.toFixed(0)} %</p>
-      <p>Charging power: {chargingPower.toFixed(2)} kW</p>
-      <p>Charging speed: {chargingSpeedPercent.toFixed(1)} %/h</p>
-      <p>Charging speed: {chargingSpeedKm.toFixed(1)} km/h</p>
-      <p>Range per charging session: {rangePerSession.toFixed(0)} km</p>
-      <p>Total range: {totalRange.toFixed(0)} km</p>
+      <p className="result-item">
+        {" "}
+        {/* Added result-item class */}
+        <span>SoC after charging:</span>{" "}
+        <strong>{socAfterCharging.toFixed(0)} %</strong>
+      </p>
+      <p className="result-item">
+        {" "}
+        {/* Added result-item class */}
+        <span>Charging power:</span>{" "}
+        <strong>{chargingPower.toFixed(2)} kW</strong>
+      </p>
+      <p className="result-item">
+        {" "}
+        {/* Added result-item class */}
+        <span>Charging speed:</span>{" "}
+        <strong>{chargingSpeedPercent.toFixed(1)} %/h</strong>
+      </p>
+      <p className="result-item">
+        {" "}
+        {/* Added result-item class */}
+        <span>Charging speed:</span>{" "}
+        <strong>{chargingSpeedKm.toFixed(1)} km/h</strong>
+      </p>
+      <p className="result-item">
+        {" "}
+        {/* Added result-item class */}
+        <span>Range per charging session:</span>{" "}
+        <strong>{rangePerSession.toFixed(0)} km</strong>
+      </p>
+      <p className="result-item">
+        {" "}
+        {/* Added result-item class */}
+        <span>Total range:</span> <strong>{totalRange.toFixed(0)} km</strong>
+      </p>
     </div>
   );
 };
