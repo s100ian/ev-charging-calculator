@@ -45,6 +45,28 @@
   cursor: pointer;
 }
 
+.slider-group button {
+  padding: 0.1em 0.3em; /* Further reduce padding */
+  font-size: 0.7em; /* Further reduce font size */
+  margin-left: 0.5em; /* Keep margin */
+  min-width: 20px; /* Reduce minimum width */
+}
+
+input[type="range"] {
+  height: 10px; /* Increase height for a bigger slider track */
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  height: 20px; /* Make thumb taller */
+  width: 20px; /* Make thumb wider */
+}
+
+input[type="range"]::-moz-range-thumb {
+  height: 20px; /* Make thumb taller */
+  width: 20px; /* Make thumb wider */
+}
+
 .results-section {
   background-color: #1f1f1f; /* Darker background for results */
 }
