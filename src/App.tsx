@@ -36,6 +36,7 @@ function App() {
   const [chargingSpeedPercent, setChargingSpeedPercent] = useState(0);
   const [chargingSpeedKm, setChargingSpeedKm] = useState(0);
   const [rangePerSession, setRangePerSession] = useState(0);
+  const [totalRange, setTotalRange] = useState(0); // Add totalRange state
 
   useEffect(() => {
     // Calculations
@@ -48,6 +49,7 @@ function App() {
     const speedPercentPerHour = socAddedPercent / duration;
     const speedKmPerHour = (powerKw / consumption) * 100;
     const rangeAddedKm = (energyAddedKwh / consumption) * 100;
+    const calculatedTotalRange = (usableCapacity / consumption) * 100; // Calculate total range
 
     // Update Results State
     setChargingPower(powerKw);
@@ -55,6 +57,7 @@ function App() {
     setChargingSpeedPercent(speedPercentPerHour);
     setChargingSpeedKm(speedKmPerHour);
     setRangePerSession(rangeAddedKm);
+    setTotalRange(calculatedTotalRange); // Set total range state
 
     // Save input state to localStorage
     localStorage.setItem("usableCapacity", usableCapacity.toString());
@@ -90,6 +93,7 @@ function App() {
         chargingSpeedPercent={chargingSpeedPercent}
         chargingSpeedKm={chargingSpeedKm}
         rangePerSession={rangePerSession}
+        totalRange={totalRange} // Pass totalRange prop
       />
       <div className="app-version">v{packageJson.version}</div>{" "}
       {/* Add version display */}
