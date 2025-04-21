@@ -1,54 +1,43 @@
-# React + TypeScript + Vite
+# EV Charging Calculator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple web application to calculate electric vehicle charging metrics based on car and charging details.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Car Information Input:** Set usable battery capacity (kWh) and energy consumption (kWh/100km).
+- **Charging Details Input:** Configure charging voltage (V), duration (hours), current state of charge (SoC %), and charging current (Amps).
+- **Calculated Results:** Displays estimated SoC after charging, charging power (kW), charging speed (%/h and km/h), and range added per session (km).
+- **Responsive Design:** Primarily designed for mobile use.
+- **Persistent State:** Input values are saved in the browser's local storage.
 
-## Expanding the ESLint configuration
+## Technologies Used
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React
+- TypeScript
+- Vite
+- CSS
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## Development Approach
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+This application was developed using an iterative, AI-assisted approach ("Vibe coding technique"), focusing on rapid prototyping and refinement based on requirements.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Installation & Usage
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+1.  Clone the repository:
+    ```bash
+    git clone https://github.com/s100ian/ev-charging-calculator.git
+    cd ev-charging-calculator
+    ```
+2.  Install dependencies:
+    ```bash
+    npm install
+    ```
+3.  Run the development server:
+    ```bash
+    npm run dev
+    ```
+4.  Open your browser and navigate to the local URL provided by Vite (usually `http://localhost:5173`).
+
+## Deployment
+
+The application is deployed using GitHub Pages. The `deploy` script in `package.json` handles the build and deployment process.
