@@ -34,7 +34,8 @@ const CarInfo: React.FC<CarInfoProps> = ({
       <h2>Car Information</h2>
       <div className="slider-group">
         <label className="slider-label">
-          Usable battery capacity (kWh): {usableCapacity}
+          Usable battery capacity (kWh):{" "}
+          <span className="slider-value">{usableCapacity}</span>
         </label>
         <div className="slider-controls">
           <button
@@ -65,7 +66,8 @@ const CarInfo: React.FC<CarInfoProps> = ({
       </div>
       <div className="slider-group">
         <label className="slider-label">
-          Consumption (kWh/100km): {consumption}
+          Consumption (kWh/100km):{" "}
+          <span className="slider-value">{consumption}</span>
         </label>
         <div className="slider-controls">
           <button

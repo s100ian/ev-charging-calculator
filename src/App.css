@@ -46,6 +46,17 @@
   font-size: 1em; /* Slightly larger font */
   color: #e0e0ff; /* Lighter label color */
   font-weight: 500;
+  display: flex; /* Use flexbox for alignment */
+  justify-content: space-between; /* Space between label text and value */
+  align-items: baseline; /* Align text baselines */
+}
+
+/* New style for the slider value */
+.slider-value {
+  font-size: 1.3em; /* Larger font size for the value */
+  font-weight: 600; /* Bolder value */
+  color: #ffffff; /* White color for better visibility */
+  margin-left: 0.5rem; /* Add some space between label and value */
 }
 
 .slider-controls {

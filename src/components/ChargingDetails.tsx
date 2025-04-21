@@ -55,7 +55,9 @@ const ChargingDetails: React.FC<ChargingDetailsProps> = ({
     <div className="input-section charging-details-container">
       <h2>Charging Details</h2>
       <div className="slider-group">
-        <label className="slider-label">Volts (V): {volts}</label>
+        <label className="slider-label">
+          Volts (V): <span className="slider-value">{volts}</span>
+        </label>
         <div className="slider-controls">
           <button
             className="control-button"
@@ -80,7 +82,9 @@ const ChargingDetails: React.FC<ChargingDetailsProps> = ({
         </div>
       </div>
       <div className="slider-group">
-        <label className="slider-label">Amps (A): {amps}</label>
+        <label className="slider-label">
+          Amps (A): <span className="slider-value">{amps}</span>
+        </label>
         <div className="slider-controls">
           <button
             className="control-button"
@@ -106,7 +110,8 @@ const ChargingDetails: React.FC<ChargingDetailsProps> = ({
       </div>
       <div className="slider-group">
         <label className="slider-label">
-          Charging duration (hours): {duration.toFixed(1)}
+          Charging duration (hours):{" "}
+          <span className="slider-value">{duration.toFixed(1)}</span>
         </label>
         <div className="slider-controls">
           <button className="control-button" onClick={handleDurationDecrement}>
@@ -127,7 +132,9 @@ const ChargingDetails: React.FC<ChargingDetailsProps> = ({
         </div>
       </div>
       <div className="slider-group">
-        <label className="slider-label">Current SoC (%): {currentSoC}</label>
+        <label className="slider-label">
+          Current SoC (%): <span className="slider-value">{currentSoC}</span>
+        </label>
         <div className="slider-controls">
           <button
             className="control-button"
