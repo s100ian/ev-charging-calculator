@@ -32,57 +32,53 @@ const CarInfo: React.FC<CarInfoProps> = ({
   return (
     <div>
       <h2>Car Information</h2>
-      <div>
-        <label>
-          Usable battery capacity (kWh): {usableCapacity}
-          <div>
-            <button
-              onClick={() =>
-                handleDecrement(setUsableCapacity, usableCapacity, 5)
-              }
-            >
-              -
-            </button>
-            <input
-              type="range"
-              min="5"
-              max="200"
-              value={usableCapacity}
-              onChange={(e) => setUsableCapacity(parseInt(e.target.value, 10))}
-            />
-            <button
-              onClick={() =>
-                handleIncrement(setUsableCapacity, usableCapacity, 200)
-              }
-            >
-              +
-            </button>
-          </div>
-        </label>
+      <div className="slider-group">
+        <label>Usable battery capacity (kWh): {usableCapacity}</label>
+        <div className="slider-controls">
+          <button
+            onClick={() =>
+              handleDecrement(setUsableCapacity, usableCapacity, 5)
+            }
+          >
+            -
+          </button>
+          <input
+            type="range"
+            min="5"
+            max="200"
+            value={usableCapacity}
+            onChange={(e) => setUsableCapacity(parseInt(e.target.value, 10))}
+          />
+          <button
+            onClick={() =>
+              handleIncrement(setUsableCapacity, usableCapacity, 200)
+            }
+          >
+            +
+          </button>
+        </div>
       </div>
-      <div>
-        <label>
-          Consumption (kWh/100km): {consumption}
-          <div>
-            <button
-              onClick={() => handleDecrement(setConsumption, consumption, 5)}
-            >
-              -
-            </button>
-            <input
-              type="range"
-              min="5"
-              max="50"
-              value={consumption}
-              onChange={(e) => setConsumption(parseInt(e.target.value, 10))}
-            />
-            <button
-              onClick={() => handleIncrement(setConsumption, consumption, 50)}
-            >
-              +
-            </button>
-          </div>
-        </label>
+      <div className="slider-group">
+        <label>Consumption (kWh/100km): {consumption}</label>
+        <div className="slider-controls">
+          <button
+            onClick={() => handleDecrement(setConsumption, consumption, 5)}
+          >
+            -
+          </button>
+          <input
+            type="range"
+            min="5"
+            max="50"
+            value={consumption}
+            onChange={(e) => setConsumption(parseInt(e.target.value, 10))}
+          />
+          <button
+            onClick={() => handleIncrement(setConsumption, consumption, 50)}
+          >
+            +
+          </button>
+        </div>
       </div>
     </div>
   );

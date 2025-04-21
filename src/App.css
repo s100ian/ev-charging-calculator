@@ -40,16 +40,24 @@
   color: #ccc;
 }
 
-.slider-group input[type="range"] {
-  width: 100%;
+.slider-controls { /* New style for the controls wrapper */
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* Add space between buttons and slider */
+}
+
+.slider-controls input[type="range"] { /* Style slider inside the controls wrapper */
+  flex-grow: 1; /* Allow slider to take available space */
+  width: auto; /* Override previous width if any */
   cursor: pointer;
 }
 
-.slider-group button {
-  padding: 0.1em 0.3em; /* Further reduce padding */
-  font-size: 0.7em; /* Further reduce font size */
-  margin-left: 0.5em; /* Keep margin */
-  min-width: 20px; /* Reduce minimum width */
+.slider-controls button { /* Adjust button styles */
+  padding: 0.2em 0.5em; /* Slightly adjust padding */
+  font-size: 0.8em; /* Slightly adjust font size */
+  margin: 0; /* Remove margin */
+  min-width: 25px; /* Adjust min-width */
+  flex-shrink: 0; /* Prevent buttons from shrinking */
 }
 
 input[type="range"] {
