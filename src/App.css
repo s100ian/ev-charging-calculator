@@ -59,7 +59,7 @@
   flex-grow: 1;
   width: auto;
   cursor: pointer;
-  height: 12px; /* Slightly thicker */
+  height: 8px; /* Adjusted track height */
   background: #444466; /* Darker track */
   border-radius: 6px;
   appearance: none; /* Override default look */
@@ -75,7 +75,7 @@
   border-radius: 50%;
   cursor: pointer;
   box-shadow: 0 0 5px rgba(138, 138, 255, 0.5); /* Thumb glow */
-  margin-top: -6px; /* Center thumb vertically */
+  margin: 0; /* Explicitly set margin */
 }
 
 .slider-input::-moz-range-thumb {
@@ -86,6 +86,7 @@
   cursor: pointer;
   border: none; /* Remove default border */
   box-shadow: 0 0 5px rgba(138, 138, 255, 0.5);
+  margin: 0; /* Explicitly set margin */
 }
 
 /* Updated control button styles */
