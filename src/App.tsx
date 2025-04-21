@@ -23,7 +23,7 @@ function App() {
   // Charging Details State - Initialize from localStorage or use defaults
   const [volts, setVolts] = useState(() => getInitialState("volts", 230)); // V
   const [duration, setDuration] = useState(() =>
-    getInitialState("duration", 6.5)
+    getInitialState("duration", 8)
   ); // hours
   const [currentSoC, setCurrentSoC] = useState(() =>
     getInitialState("currentSoC", 50)
