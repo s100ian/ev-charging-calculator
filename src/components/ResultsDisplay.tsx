@@ -27,37 +27,47 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
           {" "}
           {/* Changed p to div, added class */}
           <span>SoC after charging</span>
-          <strong>{socAfterCharging.toFixed(0)} %</strong>
+          <strong className="result-value">
+            {socAfterCharging.toFixed(0)} %
+          </strong>
         </div>
         <div className="result-tile">
           {" "}
           {/* Changed p to div, added class */}
           <span>Charging power</span>
-          <strong>{chargingPower.toFixed(2)} kW</strong>
+          <strong className="result-value">
+            {chargingPower.toFixed(2)} kW
+          </strong>
         </div>
         <div className="result-tile">
           {" "}
           {/* Changed p to div, added class */}
           <span>Charging speed</span>
-          <strong>{chargingSpeedPercent.toFixed(1)} %/h</strong>
+          <strong className="result-value">
+            {chargingSpeedPercent.toFixed(1)} %/h
+          </strong>
         </div>
         <div className="result-tile">
           {" "}
           {/* Changed p to div, added class */}
           <span>Charging speed</span>
-          <strong>{chargingSpeedKm.toFixed(1)} km/h</strong>
+          <strong className="result-value">
+            {chargingSpeedKm.toFixed(1)} km/h
+          </strong>
         </div>
         <div className="result-tile">
           {" "}
           {/* Changed p to div, added class */}
           <span>Range per session</span>
-          <strong>{rangePerSession.toFixed(0)} km</strong>
+          <strong className="result-value">
+            {rangePerSession.toFixed(0)} km
+          </strong>
         </div>
         <div className="result-tile">
           {" "}
           {/* Changed p to div, added class */}
           <span>Total range</span>
-          <strong>{totalRange.toFixed(0)} km</strong>
+          <strong className="result-value">{totalRange.toFixed(0)} km</strong>
         </div>
       </div>
     </div>

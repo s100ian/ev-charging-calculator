@@ -159,7 +159,12 @@
 .result-tile strong {
   color: #ffffff;
   font-weight: 600;
-  font-size: 1.2em; /* Larger result value */
+  /* font-size: 1.2em;  Removed from here */
+}
+
+/* New class for result value font size */
+.result-value {
+  font-size: 1.5em; /* Larger result value */
 }
 
 /* Remove default Vite/React logos and styles if not needed */
