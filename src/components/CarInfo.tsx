@@ -34,7 +34,7 @@ const CarInfo: React.FC<CarInfoProps> = ({
       <h2>Car Information</h2>
       <div>
         <label>
-          Usable capacity (kWh): {usableCapacity}
+          Usable battery capacity (kWh): {usableCapacity}
           <div>
             <button
               onClick={() =>
