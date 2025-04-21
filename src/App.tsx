@@ -4,16 +4,30 @@ import CarInfo from "./components/CarInfo";
 import ChargingDetails from "./components/ChargingDetails";
 import ResultsDisplay from "./components/ResultsDisplay";
 
-function App() {
-  // Car Info State
-  const [usableCapacity, setUsableCapacity] = useState(72); // kWh
-  const [consumption, setConsumption] = useState(18); // kWh/100km
+// Helper function to get initial state from localStorage or return default
+const getInitialState = (key: string, defaultValue: number): number => {
+  const storedValue = localStorage.getItem(key);
+  return storedValue ? parseFloat(storedValue) : defaultValue;
+};
 
-  // Charging Details State
-  const [volts, setVolts] = useState(230); // V
-  const [duration, setDuration] = useState(6.5); // hours
-  const [currentSoC, setCurrentSoC] = useState(50); // %
-  const [amps, setAmps] = useState(10); // A
+function App() {
+  // Car Info State - Initialize from localStorage or use defaults
+  const [usableCapacity, setUsableCapacity] = useState(() =>
+    getInitialState("usableCapacity", 72)
+  ); // kWh
+  const [consumption, setConsumption] = useState(() =>
+    getInitialState("consumption", 18)
+  ); // kWh/100km
+
+  // Charging Details State - Initialize from localStorage or use defaults
+  const [volts, setVolts] = useState(() => getInitialState("volts", 230)); // V
+  const [duration, setDuration] = useState(() =>
+    getInitialState("duration", 6.5)
+  ); // hours
+  const [currentSoC, setCurrentSoC] = useState(() =>
+    getInitialState("currentSoC", 50)
+  ); // %
+  const [amps, setAmps] = useState(() => getInitialState("amps", 10)); // A
 
   // Results State
   const [socAfterCharging, setSocAfterCharging] = useState(0);
@@ -40,6 +54,14 @@ function App() {
     setChargingSpeedPercent(speedPercentPerHour);
     setChargingSpeedKm(speedKmPerHour);
     setRangePerSession(rangeAddedKm);
+
+    // Save input state to localStorage
+    localStorage.setItem("usableCapacity", usableCapacity.toString());
+    localStorage.setItem("consumption", consumption.toString());
+    localStorage.setItem("volts", volts.toString());
+    localStorage.setItem("duration", duration.toString());
+    localStorage.setItem("currentSoC", currentSoC.toString());
+    localStorage.setItem("amps", amps.toString());
   }, [usableCapacity, consumption, volts, duration, currentSoC, amps]);
 
   return (
