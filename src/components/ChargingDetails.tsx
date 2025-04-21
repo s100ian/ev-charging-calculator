@@ -73,6 +73,20 @@ const ChargingDetails: React.FC<ChargingDetailsProps> = ({
         </div>
       </div>
       <div className="slider-group">
+        <label>Amps (A): {amps}</label>
+        <div className="slider-controls">
+          <button onClick={() => handleDecrement(setAmps, amps, 5)}>-</button>
+          <input
+            type="range"
+            min="5"
+            max="32"
+            value={amps}
+            onChange={(e) => setAmps(parseInt(e.target.value, 10))}
+          />
+          <button onClick={() => handleIncrement(setAmps, amps, 32)}>+</button>
+        </div>
+      </div>
+      <div className="slider-group">
         <label>Charging duration (hours): {duration.toFixed(1)}</label>
         <div className="slider-controls">
           <button onClick={handleDurationDecrement}>-</button>
@@ -105,20 +119,6 @@ const ChargingDetails: React.FC<ChargingDetailsProps> = ({
           >
             +
           </button>
-        </div>
-      </div>
-      <div className="slider-group">
-        <label>Amps (A): {amps}</label>
-        <div className="slider-controls">
-          <button onClick={() => handleDecrement(setAmps, amps, 5)}>-</button>
-          <input
-            type="range"
-            min="5"
-            max="32"
-            value={amps}
-            onChange={(e) => setAmps(parseInt(e.target.value, 10))}
-          />
-          <button onClick={() => handleIncrement(setAmps, amps, 32)}>+</button>
         </div>
       </div>
     </div>
