@@ -2,7 +2,7 @@
   "name": "ev-charging-calculator",
   "homepage": "https://s100ian.github.io/ev-charging-calculator",
   "private": true,
-  "version": "1.0.7",
+  "version": "1.0.8",
   "type": "module",
   "scripts": {
     "dev": "vite",
