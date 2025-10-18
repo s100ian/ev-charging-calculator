@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import packageJson from "../package.json"; // Import package.json
 import "./App.css";
 import CarInfo from "./components/CarInfo";
@@ -30,36 +30,32 @@ function App() {
   ); // hours
   const [amps, setAmps] = useState(() => getInitialState("amps", 10)); // A
 
-  // Results State
-  const [socAfterCharging, setSocAfterCharging] = useState(0);
-  const [chargingPower, setChargingPower] = useState(0);
-  const [chargingSpeedPercent, setChargingSpeedPercent] = useState(0);
-  const [chargingSpeedKm, setChargingSpeedKm] = useState(0);
-  const [rangePerSession, setRangePerSession] = useState(0);
-  const [totalRange, setTotalRange] = useState(0); // Add totalRange state
-
-  useEffect(() => {
-    // Calculations
-    const powerKw = (volts * amps) / 1000;
-    const energyAddedKwh = powerKw * duration;
+  // Derived values (no state updates in effects)
+  const chargingPower = useMemo(() => (volts * amps) / 1000, [volts, amps]);
+  const energyAddedKwh = useMemo(() => chargingPower * duration, [chargingPower, duration]);
+  const chargingSpeedPercent = useMemo(
+    () => (energyAddedKwh / usableCapacity) * 100 / duration,
+    [energyAddedKwh, usableCapacity, duration]
+  );
+  const socAfterCharging = useMemo(() => {
     const socAddedPercent = (energyAddedKwh / usableCapacity) * 100;
-    let finalSoC = currentSoC + socAddedPercent;
-    finalSoC = Math.min(finalSoC, 100); // Cap SoC at 100%
+    return Math.min(currentSoC + socAddedPercent, 100);
+  }, [currentSoC, energyAddedKwh, usableCapacity]);
+  const chargingSpeedKm = useMemo(
+    () => (chargingPower / consumption) * 100,
+    [chargingPower, consumption]
+  );
+  const rangePerSession = useMemo(
+    () => (energyAddedKwh / consumption) * 100,
+    [energyAddedKwh, consumption]
+  );
+  const totalRange = useMemo(
+    () => (usableCapacity / consumption) * 100,
+    [usableCapacity, consumption]
+  );
 
-    const speedPercentPerHour = socAddedPercent / duration;
-    const speedKmPerHour = (powerKw / consumption) * 100;
-    const rangeAddedKm = (energyAddedKwh / consumption) * 100;
-    const calculatedTotalRange = (usableCapacity / consumption) * 100; // Calculate total range
-
-    // Update Results State
-    setChargingPower(powerKw);
-    setSocAfterCharging(finalSoC);
-    setChargingSpeedPercent(speedPercentPerHour);
-    setChargingSpeedKm(speedKmPerHour);
-    setRangePerSession(rangeAddedKm);
-    setTotalRange(calculatedTotalRange); // Set total range state
-
-    // Save input state to localStorage
+  // Persist inputs to localStorage
+  useEffect(() => {
     localStorage.setItem("usableCapacity", usableCapacity.toString());
     localStorage.setItem("consumption", consumption.toString());
     localStorage.setItem("volts", volts.toString());
