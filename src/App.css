@@ -1,3 +1,87 @@
+:root {
+  /* Dark Theme (Default) */
+  --bg-color: #1e1e2f;
+  --container-bg: #1e1e2f;
+  --text-color: #ffffff;
+  --heading-color: #ffffff;
+  --heading-shadow: rgba(138, 138, 255, 0.6);
+  --section-bg: linear-gradient(145deg, #2c2c54, #1a1a3a);
+  --section-shadow-light: rgba(50, 50, 90, 0.1);
+  --section-shadow-dark: rgba(0, 0, 0, 0.3);
+  --accent-color: #8a8aff;
+  --label-color: #e0e0ff;
+  --input-bg: #444466;
+  --button-bg: #4a4a7a;
+  --button-hover: #5a5a8a;
+  --button-active: #3a3a6a;
+  --button-border: #6a6aaf;
+  --result-tile-bg: #2a2a4a;
+  --result-tile-border: #3a3a5a;
+  --result-label: #c0c0ff;
+  --battery-bg: #1a1a2e;
+  --slider-thumb-bg: #8a8aff;
+  /* Original vibrant blue for dark mode */
+}
+
+[data-theme="light"] {
+  /* Light Theme */
+  --bg-color: #f0f4f8;
+  --container-bg: #ffffff;
+  --text-color: #1a202c;
+  --heading-color: #2d3748;
+  --heading-shadow: rgba(0, 0, 0, 0.1);
+  --section-bg: #ffffff;
+  --section-shadow-light: rgba(255, 255, 255, 0.8);
+  /* Reduced opacity */
+  --section-shadow-dark: rgba(148, 163, 184, 0.2);
+  /* Standard shadow color */
+  --accent-color: #475569;
+  --label-color: #4a5568;
+  --input-bg: #f1f5f9;
+  /* Lighter input background */
+  --button-bg: #e2e8f0;
+  --button-hover: #cbd5e0;
+  --button-active: #a0aec0;
+  --button-border: #cbd5e0;
+  --result-tile-bg: #f8fafc;
+  --result-tile-border: #e2e8f0;
+  --result-label: #64748b;
+  --battery-bg: #cbd5e0;
+  /* Slightly darker for visibility against white */
+  --slider-thumb-bg: #718096;
+  /* Cool gray for light mode */
+}
+
+/* ... (rest of file unchanged until slider styles) ... */
+
+.slider-input::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  height: 24px;
+  width: 24px;
+  background: var(--slider-thumb-bg);
+  /* Muted thumb color */
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  /* Subtle shadow */
+  margin: 0;
+  /* Explicitly set margin */
+}
+
+.slider-input::-moz-range-thumb {
+  height: 24px;
+  width: 24px;
+  background: var(--slider-thumb-bg);
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  /* Remove default border */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  margin: 0;
+  /* Explicitly set margin */
+}
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -20,11 +104,27 @@
 
 .calculator-container h1 {
   font-size: 3rem;
-  color: #ffffff;
-  text-shadow: 0 0 15px rgba(138, 138, 255, 0.6);
+  color: var(--heading-color);
+  text-shadow: 0 0 15px var(--heading-shadow);
   margin-bottom: 2rem;
   font-weight: 700;
   letter-spacing: 1px;
+}
+
+.header-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+  width: 100%;
+  position: relative;
+}
+
+.header-container .theme-toggle {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 
@@ -37,9 +137,9 @@
   border-radius: 12px;
   /* Smoother corners */
   padding: 1.5rem;
-  background: linear-gradient(145deg, #2c2c54, #1a1a3a);
+  background: var(--section-bg);
   /* Gradient background */
-  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3), -5px -5px 15px rgba(50, 50, 90, 0.1);
+  box-shadow: 5px 5px 15px var(--section-shadow-dark), -5px -5px 15px var(--section-shadow-light);
   /* Subtle shadow */
 }
 
@@ -48,12 +148,11 @@
   margin-top: 0;
   margin-bottom: 1.5rem;
   /* Increased margin */
-  color: #8a8aff;
+  color: var(--accent-color);
   /* Brighter accent color */
   font-size: 1.4em;
   font-weight: 600;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-  /* Text shadow for depth */
+  /* text-shadow removed as requested */
 }
 
 .slider-group {
@@ -69,7 +168,7 @@
   /* Increased margin */
   font-size: 1em;
   /* Slightly larger font */
-  color: #e0e0ff;
+  color: var(--label-color);
   /* Lighter label color */
   font-weight: 500;
   display: flex;
@@ -86,8 +185,8 @@
   /* Larger font size for the value */
   font-weight: 600;
   /* Bolder value */
-  color: #ffffff;
-  /* White color for better visibility */
+  color: var(--heading-color);
+  /* Use variable for better visibility in both themes */
   margin-left: 0.5rem;
   /* Add some space between label and value */
 }
@@ -106,7 +205,7 @@
   cursor: pointer;
   height: 8px;
   /* Adjusted track height */
-  background: #444466;
+  background: var(--input-bg);
   /* Darker track */
   border-radius: 6px;
   appearance: none;
@@ -119,12 +218,12 @@
   -webkit-appearance: none;
   height: 24px;
   width: 24px;
-  background: #8a8aff;
-  /* Accent color thumb */
+  background: var(--slider-thumb-bg);
+  /* Muted thumb color */
   border-radius: 50%;
   cursor: pointer;
-  box-shadow: 0 0 5px rgba(138, 138, 255, 0.5);
-  /* Thumb glow */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  /* Subtle shadow */
   margin: 0;
   /* Explicitly set margin */
 }
@@ -132,12 +231,12 @@
 .slider-input::-moz-range-thumb {
   height: 24px;
   width: 24px;
-  background: #8a8aff;
+  background: var(--slider-thumb-bg);
   border-radius: 50%;
   cursor: pointer;
   border: none;
   /* Remove default border */
-  box-shadow: 0 0 5px rgba(138, 138, 255, 0.5);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
   margin: 0;
   /* Explicitly set margin */
 }
@@ -149,24 +248,24 @@
   margin: 0;
   min-width: 35px;
   flex-shrink: 0;
-  background-color: #4a4a7a;
+  background-color: var(--button-bg);
   /* Button background */
-  color: #e0e0ff;
+  color: var(--text-color);
   /* Button text color */
-  border: 1px solid #6a6aaf;
+  border: 1px solid var(--button-border);
   /* Button border */
   border-radius: 6px;
   transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .control-button:hover {
-  background-color: #5a5a8a;
+  background-color: var(--button-hover);
   /* Hover background */
-  border-color: #8a8aff;
+  border-color: var(--accent-color);
 }
 
 .control-button:active {
-  background-color: #3a3a6a;
+  background-color: var(--button-active);
   /* Active background */
   transform: scale(0.95);
   /* Click effect */
@@ -174,7 +273,7 @@
 
 /* Updated results section specific styles */
 .results-section {
-  background: linear-gradient(145deg, #1f1f3f, #14142a);
+  background: var(--section-bg);
   /* Darker gradient for results */
   height: fit-content;
   /* Important for sticky behavior */
@@ -205,12 +304,12 @@
 
 .result-tile {
   /* New tile styles */
-  background-color: #2a2a4a;
+  background-color: var(--result-tile-bg);
   /* Tile background */
   padding: 1rem;
   border-radius: 8px;
   text-align: center;
-  border: 1px solid #3a3a5a;
+  border: 1px solid var(--result-tile-border);
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
@@ -225,11 +324,11 @@
   width: 80%;
   /* Not full width to look like a bar inside */
   height: 8px;
-  background-color: #1a1a2e;
+  background-color: var(--battery-bg);
   border-radius: 4px;
   margin-top: 8px;
   overflow: hidden;
-  border: 1px solid #3a3a5a;
+  border: 1px solid var(--result-tile-border);
 }
 
 .battery-level {
@@ -238,7 +337,7 @@
 }
 
 .result-tile span {
-  color: #c0c0ff;
+  color: var(--result-label);
   /* Lighter text color for label */
   font-size: 0.9em;
   margin-bottom: 0.4rem;
@@ -246,7 +345,7 @@
 }
 
 .result-tile strong {
-  color: #ffffff;
+  color: var(--text-color);
   font-weight: 600;
   /* font-size: 1.2em;  Removed from here */
 }
@@ -273,7 +372,7 @@ body {
   /* Align items to top on mobile */
   padding-top: 1rem;
   /* Add some top padding */
-  background: #1e1e2f;
+  background: var(--bg-color);
   /* Darker overall background */
 }
 
@@ -298,7 +397,7 @@ body {
     /* Align items to the top */
   }
 
-  .calculator-container>h1 {
+  .header-container {
     grid-column: 1 / -1;
     /* Span full width */
     margin-bottom: 1rem;

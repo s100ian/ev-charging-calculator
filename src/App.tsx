@@ -5,6 +5,8 @@ import "./App.css";
 import CarInfo from "./components/CarInfo";
 import ChargingDetails from "./components/ChargingDetails";
 import ResultsDisplay from "./components/ResultsDisplay";
+import { ThemeProvider } from "./context/ThemeContext";
+import ThemeToggle from "./components/ThemeToggle";
 
 // Helper function to get initial state from localStorage or return default
 const getInitialState = (key: string, defaultValue: number): number => {
@@ -12,7 +14,7 @@ const getInitialState = (key: string, defaultValue: number): number => {
   return storedValue ? parseFloat(storedValue) : defaultValue;
 };
 
-function App() {
+function AppContent() {
   // Car Info State - Initialize from localStorage or use defaults
   const [usableCapacity, setUsableCapacity] = useState(() =>
     getInitialState("usableCapacity", 72)
@@ -71,7 +73,10 @@ function App() {
     <div className="calculator-container">
       {" "}
       {/* Wrap components in container */}
-      <h1>EV Charging Calculator</h1>
+      <div className="header-container">
+        <h1 style={{ marginBottom: 0 }}>EV Charging Calculator</h1>
+        <ThemeToggle />
+      </div>
       <CarInfo
         usableCapacity={usableCapacity}
         setUsableCapacity={setUsableCapacity}
@@ -99,6 +104,14 @@ function App() {
       <div className="app-version">v{packageJson.version}</div>{" "}
       {/* Add version display */}
     </div>
+  );
+}
+
+function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 }
 
