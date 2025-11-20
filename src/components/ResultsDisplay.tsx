@@ -30,6 +30,15 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
           <strong className="result-value">
             {socAfterCharging.toFixed(0)} %
           </strong>
+          <div className="battery-container">
+            <div
+              className="battery-level"
+              style={{
+                width: `${socAfterCharging}%`,
+                backgroundColor: getBatteryColor(socAfterCharging),
+              }}
+            />
+          </div>
         </div>
         <div className="result-tile">
           {" "}
@@ -72,6 +81,12 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
       </div>
     </div>
   );
+};
+
+const getBatteryColor = (soc: number): string => {
+  if (soc < 20) return "#ff4d4d";
+  if (soc < 80) return "#ffcc00";
+  return "#4dff4d";
 };
 
 export default ResultsDisplay;

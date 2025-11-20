@@ -221,6 +221,22 @@
   /* Ensure tiles have some height */
 }
 
+.battery-container {
+  width: 80%;
+  /* Not full width to look like a bar inside */
+  height: 8px;
+  background-color: #1a1a2e;
+  border-radius: 4px;
+  margin-top: 8px;
+  overflow: hidden;
+  border: 1px solid #3a3a5a;
+}
+
+.battery-level {
+  height: 100%;
+  transition: width 0.5s ease, background-color 0.5s ease;
+}
+
 .result-tile span {
   color: #c0c0ff;
   /* Lighter text color for label */
