@@ -8,6 +8,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "test": "vitest",
     "preview": "vite preview",
     "predeploy": "npm run build",
     "deploy": "npm version patch -m \"chore: release v%s\" && git push --follow-tags && gh-pages -d dist"
@@ -28,6 +29,7 @@
     "globals": "^16.4.0",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.1",
-    "vite": "^7.1.10"
+    "vite": "^7.1.10",
+    "vitest": "^4.0.10"
   }
 }

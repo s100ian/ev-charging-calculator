@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import packageJson from "../package.json"; // Import package.json
+import { calculateEnergyAdded } from "./utils/calculations";
 import "./App.css";
 import CarInfo from "./components/CarInfo";
 import ChargingDetails from "./components/ChargingDetails";
@@ -32,7 +33,9 @@ function App() {
 
   // Derived values (no state updates in effects)
   const chargingPower = useMemo(() => (volts * amps) / 1000, [volts, amps]);
-  const energyAddedKwh = useMemo(() => chargingPower * duration, [chargingPower, duration]);
+  const energyAddedKwh = useMemo(() => {
+    return calculateEnergyAdded(usableCapacity, currentSoC, volts, amps, duration);
+  }, [volts, amps, duration, usableCapacity, currentSoC]);
   const chargingSpeedPercent = useMemo(
     () => (energyAddedKwh / usableCapacity) * 100 / duration,
     [energyAddedKwh, usableCapacity, duration]
