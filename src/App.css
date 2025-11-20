@@ -3,66 +3,100 @@
   margin: 0 auto;
   padding: 1rem;
   text-align: center;
+  width: 100%;
+  /* Ensure it takes full width in flex container */
 }
 
 .calculator-container {
   display: flex;
   flex-direction: column;
-  gap: 2rem; /* Increased gap */
+  gap: 2rem;
+  /* Increased gap */
   width: 100%;
-  max-width: 600px; /* Slightly wider max-width */
+  max-width: 1200px;
+  /* Increased max-width for desktop */
   margin: 0 auto;
 }
+
+.calculator-container h1 {
+  font-size: 3rem;
+  color: #ffffff;
+  text-shadow: 0 0 15px rgba(138, 138, 255, 0.6);
+  margin-bottom: 2rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+
 
 /* Updated section styles */
 .input-section,
 .results-section {
-  border: none; /* Remove border */
-  border-radius: 12px; /* Smoother corners */
+  border: none;
+  /* Remove border */
+  border-radius: 12px;
+  /* Smoother corners */
   padding: 1.5rem;
-  background: linear-gradient(145deg, #2c2c54, #1a1a3a); /* Gradient background */
-  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3), -5px -5px 15px rgba(50, 50, 90, 0.1); /* Subtle shadow */
+  background: linear-gradient(145deg, #2c2c54, #1a1a3a);
+  /* Gradient background */
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3), -5px -5px 15px rgba(50, 50, 90, 0.1);
+  /* Subtle shadow */
 }
 
 .input-section h2,
 .results-section h2 {
   margin-top: 0;
-  margin-bottom: 1.5rem; /* Increased margin */
-  color: #8a8aff; /* Brighter accent color */
+  margin-bottom: 1.5rem;
+  /* Increased margin */
+  color: #8a8aff;
+  /* Brighter accent color */
   font-size: 1.4em;
   font-weight: 600;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Text shadow for depth */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  /* Text shadow for depth */
 }
 
 .slider-group {
-  margin-bottom: 1.5rem; /* Increased margin */
+  margin-bottom: 1.5rem;
+  /* Increased margin */
   text-align: left;
 }
 
 /* Updated label styles */
 .slider-label {
   display: block;
-  margin-bottom: 0.8rem; /* Increased margin */
-  font-size: 1em; /* Slightly larger font */
-  color: #e0e0ff; /* Lighter label color */
+  margin-bottom: 0.8rem;
+  /* Increased margin */
+  font-size: 1em;
+  /* Slightly larger font */
+  color: #e0e0ff;
+  /* Lighter label color */
   font-weight: 500;
-  display: flex; /* Use flexbox for alignment */
-  justify-content: space-between; /* Space between label text and value */
-  align-items: baseline; /* Align text baselines */
+  display: flex;
+  /* Use flexbox for alignment */
+  justify-content: space-between;
+  /* Space between label text and value */
+  align-items: baseline;
+  /* Align text baselines */
 }
 
 /* New style for the slider value */
 .slider-value {
-  font-size: 1.3em; /* Larger font size for the value */
-  font-weight: 600; /* Bolder value */
-  color: #ffffff; /* White color for better visibility */
-  margin-left: 0.5rem; /* Add some space between label and value */
+  font-size: 1.3em;
+  /* Larger font size for the value */
+  font-weight: 600;
+  /* Bolder value */
+  color: #ffffff;
+  /* White color for better visibility */
+  margin-left: 0.5rem;
+  /* Add some space between label and value */
 }
 
 .slider-controls {
   display: flex;
   align-items: center;
-  gap: 0.8rem; /* Increased gap */
+  gap: 0.8rem;
+  /* Increased gap */
 }
 
 /* Updated slider input styles */
@@ -70,10 +104,13 @@
   flex-grow: 1;
   width: auto;
   cursor: pointer;
-  height: 8px; /* Adjusted track height */
-  background: #444466; /* Darker track */
+  height: 8px;
+  /* Adjusted track height */
+  background: #444466;
+  /* Darker track */
   border-radius: 6px;
-  appearance: none; /* Override default look */
+  appearance: none;
+  /* Override default look */
   -webkit-appearance: none;
 }
 
@@ -82,11 +119,14 @@
   -webkit-appearance: none;
   height: 24px;
   width: 24px;
-  background: #8a8aff; /* Accent color thumb */
+  background: #8a8aff;
+  /* Accent color thumb */
   border-radius: 50%;
   cursor: pointer;
-  box-shadow: 0 0 5px rgba(138, 138, 255, 0.5); /* Thumb glow */
-  margin: 0; /* Explicitly set margin */
+  box-shadow: 0 0 5px rgba(138, 138, 255, 0.5);
+  /* Thumb glow */
+  margin: 0;
+  /* Explicitly set margin */
 }
 
 .slider-input::-moz-range-thumb {
@@ -95,9 +135,11 @@
   background: #8a8aff;
   border-radius: 50%;
   cursor: pointer;
-  border: none; /* Remove default border */
+  border: none;
+  /* Remove default border */
   box-shadow: 0 0 5px rgba(138, 138, 255, 0.5);
-  margin: 0; /* Explicitly set margin */
+  margin: 0;
+  /* Explicitly set margin */
 }
 
 /* Updated control button styles */
@@ -107,53 +149,84 @@
   margin: 0;
   min-width: 35px;
   flex-shrink: 0;
-  background-color: #4a4a7a; /* Button background */
-  color: #e0e0ff; /* Button text color */
-  border: 1px solid #6a6aaf; /* Button border */
+  background-color: #4a4a7a;
+  /* Button background */
+  color: #e0e0ff;
+  /* Button text color */
+  border: 1px solid #6a6aaf;
+  /* Button border */
   border-radius: 6px;
   transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .control-button:hover {
-  background-color: #5a5a8a; /* Hover background */
+  background-color: #5a5a8a;
+  /* Hover background */
   border-color: #8a8aff;
 }
 
 .control-button:active {
-  background-color: #3a3a6a; /* Active background */
-  transform: scale(0.95); /* Click effect */
+  background-color: #3a3a6a;
+  /* Active background */
+  transform: scale(0.95);
+  /* Click effect */
 }
 
 /* Updated results section specific styles */
 .results-section {
-  background: linear-gradient(145deg, #1f1f3f, #14142a); /* Darker gradient for results */
+  background: linear-gradient(145deg, #1f1f3f, #14142a);
+  /* Darker gradient for results */
+  height: fit-content;
+  /* Important for sticky behavior */
 }
 
-.results-grid { /* New grid styles */
+.results-grid {
+  /* New grid styles */
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Responsive grid */
-  gap: 1rem; /* Gap between tiles */
-  margin-top: 1rem; /* Space below the heading */
+  grid-template-columns: repeat(2, 1fr);
+  /* Responsive grid */
+  gap: 1rem;
+  /* Gap between tiles */
+  margin-top: 1rem;
+  /* Space below the heading */
 }
 
-.result-tile { /* New tile styles */
-  background-color: #2a2a4a; /* Tile background */
+@media (min-width: 700px) {
+  .results-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1100px) {
+  .results-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+.result-tile {
+  /* New tile styles */
+  background-color: #2a2a4a;
+  /* Tile background */
   padding: 1rem;
   border-radius: 8px;
   text-align: center;
   border: 1px solid #3a3a5a;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
   display: flex;
-  flex-direction: column; /* Stack label and value vertically */
+  flex-direction: column;
+  /* Stack label and value vertically */
   justify-content: center;
   align-items: center;
-  min-height: 80px; /* Ensure tiles have some height */
+  min-height: 80px;
+  /* Ensure tiles have some height */
 }
 
 .result-tile span {
-  color: #c0c0ff; /* Lighter text color for label */
+  color: #c0c0ff;
+  /* Lighter text color for label */
   font-size: 0.9em;
-  margin-bottom: 0.4rem; /* Space between label and value */
+  margin-bottom: 0.4rem;
+  /* Space between label and value */
 }
 
 .result-tile strong {
@@ -164,7 +237,8 @@
 
 /* New class for result value font size */
 .result-value {
-  font-size: 1.5em; /* Larger result value */
+  font-size: 1.5em;
+  /* Larger result value */
 }
 
 /* Remove default Vite/React logos and styles if not needed */
@@ -179,19 +253,45 @@
 body {
   min-height: 100vh;
   display: flex;
-  align-items: flex-start; /* Align items to top on mobile */
-  padding-top: 1rem; /* Add some top padding */
-  background: #1e1e2f; /* Darker overall background */
+  align-items: flex-start;
+  /* Align items to top on mobile */
+  padding-top: 1rem;
+  /* Add some top padding */
+  background: #1e1e2f;
+  /* Darker overall background */
 }
 
-/* Media query for larger screens if needed */
-@media (min-width: 600px) {
+/* Media query for larger screens */
+@media (min-width: 900px) {
   #root {
     padding: 2rem;
   }
+
   body {
-    align-items: center; /* Center vertically on larger screens */
+    align-items: center;
+    /* Center vertically on larger screens */
     padding-top: 0;
+  }
+
+  .calculator-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* Two equal columns */
+    gap: 2rem;
+    align-items: start;
+    /* Align items to the top */
+  }
+
+  .calculator-container>h1 {
+    grid-column: 1 / -1;
+    /* Span full width */
+    margin-bottom: 1rem;
+  }
+
+  /* Results section spans full width at the bottom */
+  .results-section {
+    grid-column: 1 / -1;
+    margin-top: 1rem;
   }
 }
 
@@ -199,6 +299,8 @@ body {
   position: fixed;
   bottom: 10px;
   right: 10px;
-  font-size: 0.75rem; /* Small font size */
-  color: #aaa; /* Adjusted color */
+  font-size: 0.75rem;
+  /* Small font size */
+  color: #aaa;
+  /* Adjusted color */
 }
