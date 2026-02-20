@@ -69,7 +69,7 @@ const CarInfo: React.FC<CarInfoProps> = ({
           </button>
         </div>
       </div>
-      <div className="slider-group">
+      <div className="slider-group" data-testid="consumption-group">
         <label className="slider-label">
           Consumption (kWh/100km):{" "}
           <span className="slider-value">{consumption}</span>
@@ -88,6 +88,7 @@ const CarInfo: React.FC<CarInfoProps> = ({
             value={consumption}
             onChange={(e) => setConsumption(parseInt(e.target.value, 10))}
             className="slider-input"
+            data-testid="consumption-slider"
           />
           <button
             className="control-button"
@@ -97,7 +98,7 @@ const CarInfo: React.FC<CarInfoProps> = ({
           </button>
         </div>
       </div>
-      <div className="slider-group">
+      <div className="slider-group" data-testid="current-soc-group">
         <label className="slider-label">
           Current SoC (%): <span className="slider-value">{currentSoC}</span>
         </label>
@@ -115,6 +116,7 @@ const CarInfo: React.FC<CarInfoProps> = ({
             value={currentSoC}
             onChange={(e) => setCurrentSoC(parseInt(e.target.value, 10))}
             className="slider-input"
+            data-testid="current-soc-slider"
           />
           <button
             className="control-button"

@@ -69,4 +69,72 @@ test.describe("EV Charging Calculator", () => {
     const newTheme = await html.getAttribute("data-theme");
     expect(newTheme).not.toBe(initialTheme);
   });
+
+  test("theme toggle persists after reload", async ({ page }) => {
+    await page.locator(".theme-toggle").click();
+    const themeAfterToggle = await page.locator("html").getAttribute("data-theme");
+
+    await page.reload();
+
+    const themeAfterReload = await page.locator("html").getAttribute("data-theme");
+    expect(themeAfterReload).toBe(themeAfterToggle);
+  });
+
+  test("current SoC slider change causes SoC to reach 100%", async ({ page }) => {
+    // 80% SoC + 8h at 2.3 kW on 72 kWh battery crosses the cap
+    const socSlider = page.locator('[data-testid="current-soc-slider"]');
+    await socSlider.fill("80");
+
+    const socResult = page.locator(".result-value").nth(0);
+    await expect(socResult).toHaveText("100 %");
+  });
+
+  test("consumption slider change updates total range", async ({ page }) => {
+    // totalRange = (72 / 20) * 100 = 360 km
+    const consumptionSlider = page.locator('[data-testid="consumption-slider"]');
+    await consumptionSlider.fill("20");
+
+    const totalRange = page.locator(".result-value").nth(5);
+    await expect(totalRange).toHaveText("360 km");
+  });
+
+  test("volts slider change updates charging power", async ({ page }) => {
+    // chargingPower = (110 * 10) / 1000 = 1.10 kW
+    const voltsSlider = page.locator('[data-testid="volts-slider"]');
+    await voltsSlider.fill("110");
+
+    const chargingPower = page.locator(".result-value").nth(1);
+    await expect(chargingPower).toHaveText("1.10 kW");
+  });
+
+  test("duration + button increases range per session", async ({ page }) => {
+    // Default: 8h * 2.3 kW = 18.4 kWh → 102 km
+    // After +0.1h: 8.1h * 2.3 kW = 18.63 kWh → 103.5 → 104 km
+    const durationPlusButton = page
+      .locator('[data-testid="duration-group"]')
+      .locator("button", { hasText: "+" });
+    await durationPlusButton.click();
+
+    const rangePerSession = page.locator(".result-value").nth(4);
+    await expect(rangePerSession).toHaveText("104 km");
+  });
+
+  test("capacity - button decreases total range", async ({ page }) => {
+    // Default: 400 km; after decrement: (71 / 18) * 100 ≈ 394 km
+    const capacityMinusButton = page
+      .locator('[data-testid="usable-capacity-group"]')
+      .locator("button", { hasText: "-" });
+    await capacityMinusButton.click();
+
+    const totalRange = page.locator(".result-value").nth(5);
+    await expect(totalRange).toHaveText("394 km");
+  });
+
+  test("label value updates when slider changes", async ({ page }) => {
+    const ampsSlider = page.locator('[data-testid="amps-slider"]');
+    await ampsSlider.fill("20");
+
+    const ampsGroup = page.locator('[data-testid="amps-group"]');
+    await expect(ampsGroup).toContainText("20");
+  });
 });
