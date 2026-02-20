@@ -36,7 +36,7 @@ const CarInfo: React.FC<CarInfoProps> = ({
   return (
     <div className="input-section car-info-container">
       <h2>Car Information</h2>
-      <div className="slider-group">
+      <div className="slider-group" data-testid="usable-capacity-group">
         <label className="slider-label">
           Usable battery capacity (kWh):{" "}
           <span className="slider-value">{usableCapacity}</span>
@@ -57,6 +57,7 @@ const CarInfo: React.FC<CarInfoProps> = ({
             value={usableCapacity}
             onChange={(e) => setUsableCapacity(parseInt(e.target.value, 10))}
             className="slider-input"
+            data-testid="usable-capacity-slider"
           />
           <button
             className="control-button"

@@ -22,7 +22,7 @@ test.describe("EV Charging Calculator", () => {
   });
 
   test("slider interaction updates results", async ({ page }) => {
-    const ampsSlider = page.locator('input[type="range"]').nth(4); // Amps slider
+    const ampsSlider = page.locator('[data-testid="amps-slider"]');
     await ampsSlider.fill("16");
 
     // Charging power should update: (230 * 16) / 1000 = 3.68 kW
@@ -33,8 +33,7 @@ test.describe("EV Charging Calculator", () => {
   test("button interaction updates results", async ({ page }) => {
     // Click "+" on usable battery capacity (default 72 -> 73)
     const capacityPlusButton = page
-      .locator(".slider-group")
-      .first()
+      .locator('[data-testid="usable-capacity-group"]')
       .locator("button", { hasText: "+" });
     await capacityPlusButton.click();
 
@@ -45,7 +44,7 @@ test.describe("EV Charging Calculator", () => {
 
   test("localStorage persistence", async ({ page }) => {
     // Change amps via slider
-    const ampsSlider = page.locator('input[type="range"]').nth(4);
+    const ampsSlider = page.locator('[data-testid="amps-slider"]');
     await ampsSlider.fill("20");
 
     // Verify the value took effect
