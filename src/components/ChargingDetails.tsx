@@ -95,6 +95,7 @@ const ChargingDetails: React.FC<ChargingDetailsProps> = ({
             value={amps}
             onChange={(e) => setAmps(parseInt(e.target.value, 10))}
             className="slider-input"
+            data-testid="amps-slider"
           />
           <button
             className="control-button"
