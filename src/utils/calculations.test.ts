@@ -98,15 +98,10 @@ describe('calculateEnergyAdded', () => {
         expect(result).toBeCloseTo(0.055, 3);
     });
 
-    // Bug documentation: amps=0 causes incorrect trickle energy to be added
-    // because timeTo99 is guarded to 0 instead of Infinity, making the function
-    // think the 99% threshold was crossed instantly even though no charging occurred.
-    it('documents amps=0 bug: trickle energy added despite zero charging power', () => {
-        // With 0 amps, no energy should be added. However due to the timeTo99
-        // guard (returns 0 instead of Infinity), the function enters the trickle
-        // branch and adds trickle energy up to the cap (50 kWh for 50% SoC).
+    it('should return 0 when amps is 0 (no charging power)', () => {
+        // With 0 amps, powerNormal=0 so timeTo99=Infinity; the normal-charging
+        // branch is always taken and returns powerNormal * duration = 0.
         const result = calculateEnergyAdded(capacity, 50, volts, 0, 1);
-        // BUG: returns 50 instead of 0
-        expect(result).toBeCloseTo(50, 3);
+        expect(result).toBeCloseTo(0, 3);
     });
 });
