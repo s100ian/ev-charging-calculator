@@ -17,7 +17,7 @@ export function calculateEnergyAdded(
     const powerNormal = (volts * amps) / 1000;
 
     // Time to reach 99% at normal power
-    const timeTo99 = powerNormal > 0 ? energyTo99 / powerNormal : 0;
+    const timeTo99 = powerNormal > 0 ? energyTo99 / powerNormal : Infinity;
 
     if (duration <= timeTo99) {
         // We don't reach 99% (or barely do), so all charging is at normal power

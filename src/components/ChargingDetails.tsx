@@ -50,7 +50,7 @@ const ChargingDetails: React.FC<ChargingDetailsProps> = ({
   return (
     <div className="input-section charging-details-container">
       <h2>Charging Details</h2>
-      <div className="slider-group">
+      <div className="slider-group" data-testid="volts-group">
         <label className="slider-label">
           Volts (V): <span className="slider-value">{volts}</span>
         </label>
@@ -68,6 +68,7 @@ const ChargingDetails: React.FC<ChargingDetailsProps> = ({
             value={volts}
             onChange={(e) => setVolts(parseInt(e.target.value, 10))}
             className="slider-input"
+            data-testid="volts-slider"
           />
           <button
             className="control-button"
@@ -77,7 +78,7 @@ const ChargingDetails: React.FC<ChargingDetailsProps> = ({
           </button>
         </div>
       </div>
-      <div className="slider-group">
+      <div className="slider-group" data-testid="amps-group">
         <label className="slider-label">
           Amps (A): <span className="slider-value">{amps}</span>
         </label>
@@ -105,7 +106,7 @@ const ChargingDetails: React.FC<ChargingDetailsProps> = ({
           </button>
         </div>
       </div>
-      <div className="slider-group">
+      <div className="slider-group" data-testid="duration-group">
         <label className="slider-label">
           Charging duration (hours):{" "}
           <span className="slider-value">{duration.toFixed(1)}</span>
@@ -122,6 +123,7 @@ const ChargingDetails: React.FC<ChargingDetailsProps> = ({
             value={duration}
             onChange={handleDurationChange}
             className="slider-input"
+            data-testid="duration-slider"
           />
           <button className="control-button" onClick={handleDurationIncrement}>
             +
