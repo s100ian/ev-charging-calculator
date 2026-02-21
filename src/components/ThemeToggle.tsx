@@ -17,14 +17,6 @@ const ThemeToggle: React.FC = () => {
             onClick={cycleTheme}
             className="theme-toggle"
             title={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
-            style={{
-                background: "transparent",
-                border: "none",
-                fontSize: "1.5rem",
-                cursor: "pointer",
-                padding: "0.5rem",
-                lineHeight: 1,
-            }}
         >
             {getIcon()}
         </button>

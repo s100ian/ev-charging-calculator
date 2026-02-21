@@ -67,7 +67,9 @@ function AppContent() {
       {" "}
       {/* Wrap components in container */}
       <div className="header-container">
-        <h1 style={{ marginBottom: 0 }}>EV Charging Calculator</h1>
+        <h1 style={{ marginBottom: 0 }}>
+          <span className="ev-badge">⚡</span>EV Charging Calculator
+        </h1>
         <ThemeToggle />
       </div>
       <CarInfo

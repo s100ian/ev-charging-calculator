@@ -8,7 +8,7 @@ test.describe("EV Charging Calculator", () => {
   });
 
   test("default state renders correctly", async ({ page }) => {
-    await expect(page.locator("h1")).toHaveText("EV Charging Calculator");
+    await expect(page.locator("h1")).toHaveText("⚡EV Charging Calculator");
 
     const resultValues = page.locator(".result-value");
     await expect(resultValues).toHaveCount(6);
