@@ -1,85 +1,56 @@
 :root {
   /* Dark Theme (Default) */
-  --bg-color: #1e1e2f;
-  --container-bg: #1e1e2f;
-  --text-color: #ffffff;
-  --heading-color: #ffffff;
-  --heading-shadow: rgba(138, 138, 255, 0.6);
-  --section-bg: linear-gradient(145deg, #2c2c54, #1a1a3a);
-  --section-shadow-light: rgba(50, 50, 90, 0.1);
-  --section-shadow-dark: rgba(0, 0, 0, 0.3);
-  --accent-color: #8a8aff;
-  --label-color: #e0e0ff;
-  --input-bg: #444466;
-  --button-bg: #4a4a7a;
-  --button-hover: #5a5a8a;
-  --button-active: #3a3a6a;
-  --button-border: #6a6aaf;
-  --result-tile-bg: #2a2a4a;
-  --result-tile-border: #3a3a5a;
-  --result-label: #c0c0ff;
-  --battery-bg: #1a1a2e;
-  --slider-thumb-bg: #8a8aff;
-  /* Original vibrant blue for dark mode */
+  --bg-color: #18181b;
+  --container-bg: #18181b;
+  --text-color: #f4f4f5;
+  --heading-color: #f4f4f5;
+  --heading-shadow: none;
+  --section-bg: #27272a;
+  --section-shadow-light: transparent;
+  --section-shadow-dark: rgba(0, 0, 0, 0.25);
+  --accent-color: #10b981;
+  --label-color: #a1a1aa;
+  --input-bg: #3f3f46;
+  --button-bg: #3f3f46;
+  --button-hover: #52525b;
+  --button-active: #27272a;
+  --button-border: transparent;
+  --result-tile-bg: #1c1c1f;
+  --result-tile-border: transparent;
+  --result-label: #71717a;
+  --battery-bg: #3f3f46;
+  --slider-thumb-bg: #27272a;
+  --radius-card: 20px;
+  --radius-tile: 16px;
+  --radius-btn: 50%;
+  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.25), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+  --shadow-tile: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 [data-theme="light"] {
   /* Light Theme */
-  --bg-color: #f0f4f8;
-  --container-bg: #ffffff;
-  --text-color: #1a202c;
-  --heading-color: #2d3748;
-  --heading-shadow: rgba(0, 0, 0, 0.1);
+  --bg-color: #f9fafb;
+  --container-bg: #f9fafb;
+  --text-color: #111827;
+  --heading-color: #111827;
+  --heading-shadow: none;
   --section-bg: #ffffff;
-  --section-shadow-light: rgba(255, 255, 255, 0.8);
-  /* Reduced opacity */
-  --section-shadow-dark: rgba(148, 163, 184, 0.2);
-  /* Standard shadow color */
-  --accent-color: #475569;
-  --label-color: #4a5568;
-  --input-bg: #f1f5f9;
-  /* Lighter input background */
-  --button-bg: #e2e8f0;
-  --button-hover: #cbd5e0;
-  --button-active: #a0aec0;
-  --button-border: #cbd5e0;
-  --result-tile-bg: #f8fafc;
-  --result-tile-border: #e2e8f0;
-  --result-label: #64748b;
-  --battery-bg: #cbd5e0;
-  /* Slightly darker for visibility against white */
-  --slider-thumb-bg: #718096;
-  /* Cool gray for light mode */
-}
-
-/* ... (rest of file unchanged until slider styles) ... */
-
-.slider-input::-webkit-slider-thumb {
-  appearance: none;
-  -webkit-appearance: none;
-  height: 24px;
-  width: 24px;
-  background: var(--slider-thumb-bg);
-  /* Muted thumb color */
-  border-radius: 50%;
-  cursor: pointer;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-  /* Subtle shadow */
-  margin: 0;
-  /* Explicitly set margin */
-}
-
-.slider-input::-moz-range-thumb {
-  height: 24px;
-  width: 24px;
-  background: var(--slider-thumb-bg);
-  border-radius: 50%;
-  cursor: pointer;
-  border: none;
-  /* Remove default border */
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-  margin: 0;
-  /* Explicitly set margin */
+  --section-shadow-light: transparent;
+  --section-shadow-dark: rgba(0, 0, 0, 0.08);
+  --accent-color: #059669;
+  --label-color: #6b7280;
+  --input-bg: #e5e7eb;
+  --button-bg: #f3f4f6;
+  --button-hover: #e5e7eb;
+  --button-active: #d1d5db;
+  --button-border: transparent;
+  --result-tile-bg: #f9fafb;
+  --result-tile-border: transparent;
+  --result-label: #9ca3af;
+  --battery-bg: #e5e7eb;
+  --slider-thumb-bg: #ffffff;
+  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  --shadow-tile: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
 #root {
@@ -88,28 +59,39 @@
   padding: 1rem;
   text-align: center;
   width: 100%;
-  /* Ensure it takes full width in flex container */
 }
 
 .calculator-container {
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  /* Increased gap */
   width: 100%;
   max-width: 1200px;
-  /* Increased max-width for desktop */
   margin: 0 auto;
 }
 
 .calculator-container h1 {
-  font-size: 3rem;
+  display: flex;
+  align-items: center;
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
   color: var(--heading-color);
-  text-shadow: 0 0 15px var(--heading-shadow);
   margin-top: 0;
   margin-bottom: 2rem;
-  font-weight: 700;
-  letter-spacing: 1px;
+}
+
+.ev-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  background: var(--accent-color);
+  border-radius: 8px;
+  margin-right: 10px;
+  font-size: 1rem;
 }
 
 .header-container {
@@ -128,167 +110,123 @@
   transform: translateY(-50%);
 }
 
-
-
-/* Updated section styles */
+/* Section styles */
 .input-section,
 .results-section {
   border: none;
-  /* Remove border */
-  border-radius: 12px;
-  /* Smoother corners */
-  padding: 1.5rem;
+  border-radius: var(--radius-card);
+  padding: 24px;
   background: var(--section-bg);
-  /* Gradient background */
-  box-shadow: 5px 5px 15px var(--section-shadow-dark), -5px -5px 15px var(--section-shadow-light);
-  /* Subtle shadow */
+  box-shadow: var(--shadow-card);
 }
 
 .input-section h2,
 .results-section h2 {
   margin-top: 0;
-  margin-bottom: 1.5rem;
-  /* Increased margin */
+  margin-bottom: 20px;
   color: var(--accent-color);
-  /* Brighter accent color */
-  font-size: 1.4em;
+  font-size: 0.75rem;
   font-weight: 600;
-  /* text-shadow removed as requested */
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .slider-group {
   margin-bottom: 1.5rem;
-  /* Increased margin */
   text-align: left;
 }
 
-/* Updated label styles */
 .slider-label {
-  display: block;
-  margin-bottom: 0.8rem;
-  /* Increased margin */
-  font-size: 1em;
-  /* Slightly larger font */
-  color: var(--label-color);
-  /* Lighter label color */
-  font-weight: 500;
   display: flex;
-  /* Use flexbox for alignment */
   justify-content: space-between;
-  /* Space between label text and value */
   align-items: baseline;
-  /* Align text baselines */
+  margin-bottom: 0.8rem;
+  font-size: 1em;
+  color: var(--label-color);
+  font-weight: 500;
 }
 
-/* New style for the slider value */
 .slider-value {
-  font-size: 1.3em;
-  /* Larger font size for the value */
+  font-size: 1.5rem;
   font-weight: 600;
-  /* Bolder value */
-  color: var(--heading-color);
-  /* Use variable for better visibility in both themes */
+  color: var(--accent-color);
   margin-left: 0.5rem;
-  /* Add some space between label and value */
 }
 
 .slider-controls {
   display: flex;
   align-items: center;
   gap: 0.8rem;
-  /* Increased gap */
 }
 
-/* Updated slider input styles */
 .slider-input {
   flex-grow: 1;
   width: auto;
   cursor: pointer;
-  height: 8px;
-  /* Adjusted track height */
+  height: 6px;
   background: var(--input-bg);
-  /* Darker track */
-  border-radius: 6px;
+  border-radius: 100px;
   appearance: none;
-  /* Override default look */
   -webkit-appearance: none;
 }
 
 .slider-input::-webkit-slider-thumb {
   appearance: none;
   -webkit-appearance: none;
-  height: 24px;
-  width: 24px;
+  height: 20px;
+  width: 20px;
   background: var(--slider-thumb-bg);
-  /* Muted thumb color */
   border-radius: 50%;
+  border: 2.5px solid var(--accent-color);
   cursor: pointer;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-  /* Subtle shadow */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   margin: 0;
-  /* Explicitly set margin */
 }
 
 .slider-input::-moz-range-thumb {
-  height: 24px;
-  width: 24px;
+  height: 20px;
+  width: 20px;
   background: var(--slider-thumb-bg);
   border-radius: 50%;
+  border: 2.5px solid var(--accent-color);
   cursor: pointer;
-  border: none;
-  /* Remove default border */
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   margin: 0;
-  /* Explicitly set margin */
 }
 
-/* Updated control button styles */
 .control-button {
-  padding: 0.4em 0.8em;
-  font-size: 1em;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-btn);
+  padding: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
   margin: 0;
-  min-width: 35px;
   flex-shrink: 0;
   background-color: var(--button-bg);
-  /* Button background */
   color: var(--text-color);
-  /* Button text color */
-  border: 1px solid var(--button-border);
-  /* Button border */
-  border-radius: 6px;
+  border: none;
   transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .control-button:hover {
   background-color: var(--button-hover);
-  /* Hover background */
-  border-color: var(--accent-color);
 }
 
 .control-button:active {
   background-color: var(--button-active);
-  /* Active background */
   transform: scale(0.95);
-  /* Click effect */
 }
 
-/* Updated results section specific styles */
 .results-section {
-  background: var(--section-bg);
-  /* Darker gradient for results */
   height: fit-content;
-  /* Important for sticky behavior */
 }
 
 .results-grid {
-  /* New grid styles */
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  /* Responsive grid */
   gap: 1rem;
-  /* Gap between tiles */
   margin-top: 1rem;
-  /* Space below the heading */
 }
 
 @media (min-width: 700px) {
@@ -304,57 +242,68 @@
 }
 
 .result-tile {
-  /* New tile styles */
   background-color: var(--result-tile-bg);
-  /* Tile background */
   padding: 1rem;
-  border-radius: 8px;
+  border-radius: var(--radius-tile);
   text-align: center;
-  border: 1px solid var(--result-tile-border);
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  border: none;
+  box-shadow: var(--shadow-tile);
   display: flex;
   flex-direction: column;
-  /* Stack label and value vertically */
   justify-content: center;
   align-items: center;
   min-height: 80px;
-  /* Ensure tiles have some height */
 }
 
 .battery-container {
   width: 80%;
-  /* Not full width to look like a bar inside */
-  height: 8px;
+  height: 4px;
   background-color: var(--battery-bg);
-  border-radius: 4px;
+  border-radius: 100px;
   margin-top: 8px;
   overflow: hidden;
-  border: 1px solid var(--result-tile-border);
+  border: none;
 }
 
 .battery-level {
   height: 100%;
+  border-radius: 100px;
   transition: width 0.5s ease, background-color 0.5s ease;
 }
 
 .result-tile span {
   color: var(--result-label);
-  /* Lighter text color for label */
   font-size: 0.9em;
   margin-bottom: 0.4rem;
-  /* Space between label and value */
 }
 
 .result-tile strong {
   color: var(--text-color);
   font-weight: 600;
-  /* font-size: 1.2em;  Removed from here */
 }
 
-/* New class for result value font size */
 .result-value {
-  font-size: 1.5em;
-  /* Larger result value */
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--button-bg);
+  border: none;
+  font-size: 1.1rem;
+  box-shadow: var(--shadow-tile);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.theme-toggle:hover {
+  background-color: var(--button-hover);
 }
 
 /* Remove default Vite/React logos and styles if not needed */
@@ -365,16 +314,17 @@
   display: none;
 }
 
-/* Ensure body takes full height for centering */
+/* Ensure body and html take full height for centering */
+html {
+  background: var(--bg-color);
+}
+
 body {
   min-height: 100vh;
   display: flex;
   align-items: flex-start;
-  /* Align items to top on mobile */
   padding-top: 1rem;
-  /* Add some top padding */
   background: var(--bg-color);
-  /* Darker overall background */
 }
 
 /* Media query for larger screens */
@@ -385,26 +335,21 @@ body {
 
   body {
     align-items: center;
-    /* Center vertically on larger screens */
     padding-top: 0;
   }
 
   .calculator-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    /* Two equal columns */
     gap: 2rem;
     align-items: start;
-    /* Align items to the top */
   }
 
   .header-container {
     grid-column: 1 / -1;
-    /* Span full width */
     margin-bottom: 1rem;
   }
 
-  /* Results section spans full width at the bottom */
   .results-section {
     grid-column: 1 / -1;
   }
@@ -415,7 +360,5 @@ body {
   bottom: 10px;
   right: 10px;
   font-size: 0.75rem;
-  /* Small font size */
-  color: #aaa;
-  /* Adjusted color */
+  color: var(--result-label);
 }
