@@ -10,8 +10,12 @@ import ThemeToggle from "./components/ThemeToggle";
 
 // Helper function to get initial state from localStorage or return default
 const getInitialState = (key: string, defaultValue: number): number => {
-  const storedValue = localStorage.getItem(key);
-  return storedValue ? parseFloat(storedValue) : defaultValue;
+  try {
+    const storedValue = localStorage.getItem(key);
+    return storedValue ? parseFloat(storedValue) : defaultValue;
+  } catch {
+    return defaultValue;
+  }
 };
 
 function AppContent() {
@@ -34,39 +38,28 @@ function AppContent() {
   const [amps, setAmps] = useState(() => getInitialState("amps", 10)); // A
 
   // Derived values (no state updates in effects)
-  const chargingPower = useMemo(() => (volts * amps) / 1000, [volts, amps]);
+  const chargingPower = (volts * amps) / 1000;
   const energyAddedKwh = useMemo(() => {
     return calculateEnergyAdded(usableCapacity, currentSoC, volts, amps, duration);
   }, [volts, amps, duration, usableCapacity, currentSoC]);
-  const chargingSpeedPercent = useMemo(
-    () => (energyAddedKwh / usableCapacity) * 100 / duration,
-    [energyAddedKwh, usableCapacity, duration]
-  );
-  const socAfterCharging = useMemo(() => {
-    const socAddedPercent = (energyAddedKwh / usableCapacity) * 100;
-    return Math.min(currentSoC + socAddedPercent, 100);
-  }, [currentSoC, energyAddedKwh, usableCapacity]);
-  const chargingSpeedKm = useMemo(
-    () => (chargingPower / consumption) * 100,
-    [chargingPower, consumption]
-  );
-  const rangePerSession = useMemo(
-    () => (energyAddedKwh / consumption) * 100,
-    [energyAddedKwh, consumption]
-  );
-  const totalRange = useMemo(
-    () => (usableCapacity / consumption) * 100,
-    [usableCapacity, consumption]
-  );
+  const chargingSpeedPercent = (energyAddedKwh / usableCapacity) * 100 / duration;
+  const socAfterCharging = Math.min(currentSoC + (energyAddedKwh / usableCapacity) * 100, 100);
+  const chargingSpeedKm = (chargingPower / consumption) * 100;
+  const rangePerSession = (energyAddedKwh / consumption) * 100;
+  const totalRange = (usableCapacity / consumption) * 100;
 
   // Persist inputs to localStorage
   useEffect(() => {
-    localStorage.setItem("usableCapacity", usableCapacity.toString());
-    localStorage.setItem("consumption", consumption.toString());
-    localStorage.setItem("volts", volts.toString());
-    localStorage.setItem("duration", duration.toString());
-    localStorage.setItem("currentSoC", currentSoC.toString());
-    localStorage.setItem("amps", amps.toString());
+    try {
+      localStorage.setItem("usableCapacity", usableCapacity.toString());
+      localStorage.setItem("consumption", consumption.toString());
+      localStorage.setItem("volts", volts.toString());
+      localStorage.setItem("duration", duration.toString());
+      localStorage.setItem("currentSoC", currentSoC.toString());
+      localStorage.setItem("amps", amps.toString());
+    } catch {
+      // localStorage unavailable (incognito, quota exceeded, disabled)
+    }
   }, [usableCapacity, consumption, volts, duration, currentSoC, amps]);
 
   return (
