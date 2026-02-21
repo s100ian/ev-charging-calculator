@@ -13,9 +13,13 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
     children,
 }) => {
     const [theme, setTheme] = useState<Theme>(() => {
-        const storedTheme = localStorage.getItem("theme");
-        if (storedTheme === "light" || storedTheme === "dark") {
-            return storedTheme;
+        try {
+            const storedTheme = localStorage.getItem("theme");
+            if (storedTheme === "light" || storedTheme === "dark") {
+                return storedTheme;
+            }
+        } catch {
+            // localStorage unavailable (incognito, quota exceeded, disabled)
         }
         // Default to OS preference if no stored theme
         return window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -26,7 +30,11 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
     useEffect(() => {
         const root = window.document.documentElement;
         root.setAttribute("data-theme", theme);
-        localStorage.setItem("theme", theme);
+        try {
+            localStorage.setItem("theme", theme);
+        } catch {
+            // localStorage unavailable (incognito, quota exceeded, disabled)
+        }
     }, [theme]);
 
     return (
