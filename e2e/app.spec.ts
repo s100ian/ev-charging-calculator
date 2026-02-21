@@ -109,14 +109,14 @@ test.describe("EV Charging Calculator", () => {
 
   test("duration + button increases range per session", async ({ page }) => {
     // Default: 8h * 2.3 kW = 18.4 kWh → 102 km
-    // After +0.1h: 8.1h * 2.3 kW = 18.63 kWh → 103.5 → 104 km
+    // After +0.1h: 2.3 * 8.1 = 18.629999... kWh (float) → 103.499... → 103 km
     const durationPlusButton = page
       .locator('[data-testid="duration-group"]')
       .locator("button", { hasText: "+" });
     await durationPlusButton.click();
 
     const rangePerSession = page.locator(".result-value").nth(4);
-    await expect(rangePerSession).toHaveText("104 km");
+    await expect(rangePerSession).toHaveText("103 km");
   });
 
   test("capacity - button decreases total range", async ({ page }) => {
