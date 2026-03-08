@@ -15,12 +15,11 @@ import {
 
 describe('calculateEnergyAdded', () => {
     const capacity = 100; // 100 kWh
-    const volts = 230;
-    const amps = 32; // 7.36 kW
+    const chargingPowerKw = 7.36;
 
     it('should calculate normal charging correctly (below 99%)', () => {
         // 1 hour at 7.36 kW = 7.36 kWh
-        const result = calculateEnergyAdded(capacity, 50, volts, amps, 1);
+        const result = calculateEnergyAdded(capacity, 50, chargingPowerKw, 1);
         expect(result).toBeCloseTo(7.36, 3);
     });
 
@@ -40,7 +39,7 @@ describe('calculateEnergyAdded', () => {
         const timeTrickle = 0.5 / 1.15;
         const duration = timeTo99 + timeTrickle;
 
-        const result = calculateEnergyAdded(capacity, 98, volts, amps, duration);
+        const result = calculateEnergyAdded(capacity, 98, chargingPowerKw, duration);
         expect(result).toBeCloseTo(1.5, 3);
     });
 
@@ -49,71 +48,68 @@ describe('calculateEnergyAdded', () => {
         // Should use 5A (1.15 kW)
         // Energy = 1.15 kWh
         // But capped at 100% (0.5 kWh remaining)
-        const result = calculateEnergyAdded(capacity, 99.5, volts, amps, 1);
+        const result = calculateEnergyAdded(capacity, 99.5, chargingPowerKw, 1);
         expect(result).toBeCloseTo(0.5, 3);
     });
 
     it('should not exceed 100% capacity', () => {
         // Start at 99.5%. Long duration.
-        const result = calculateEnergyAdded(capacity, 99.5, volts, amps, 10);
+        const result = calculateEnergyAdded(capacity, 99.5, chargingPowerKw, 10);
         expect(result).toBeCloseTo(0.5, 3);
     });
 
     it('should handle short duration above 99%', () => {
         // 0.1 hour at 1.15 kW = 0.115 kWh
-        const result = calculateEnergyAdded(capacity, 99.5, volts, amps, 0.1);
+        const result = calculateEnergyAdded(capacity, 99.5, chargingPowerKw, 0.1);
         expect(result).toBeCloseTo(0.115, 3);
     });
 
     it('should return 0 for zero duration', () => {
-        const result = calculateEnergyAdded(capacity, 50, volts, amps, 0);
+        const result = calculateEnergyAdded(capacity, 50, chargingPowerKw, 0);
         expect(result).toBe(0);
     });
 
     it('should charge normally from 0% SoC', () => {
         // 1 hour at 7.36 kW from empty
-        const result = calculateEnergyAdded(capacity, 0, volts, amps, 1);
+        const result = calculateEnergyAdded(capacity, 0, chargingPowerKw, 1);
         expect(result).toBeCloseTo(7.36, 3);
     });
 
     it('should return 0 when already at 100% SoC', () => {
-        const result = calculateEnergyAdded(capacity, 100, volts, amps, 1);
+        const result = calculateEnergyAdded(capacity, 100, chargingPowerKw, 1);
         expect(result).toBeCloseTo(0, 5);
     });
 
     it('should use trickle charging immediately when starting at exactly 99%', () => {
         // energyTo99 = 0, goes straight to trickle for the full duration
         // 0.5 hour at 1.15 kW = 0.575 kWh; cap = 1 kWh so no capping
-        const result = calculateEnergyAdded(capacity, 99, volts, amps, 0.5);
+        const result = calculateEnergyAdded(capacity, 99, chargingPowerKw, 0.5);
         expect(result).toBeCloseTo(0.575, 3);
     });
 
     it('should handle duration exactly equal to timeTo99 (boundary)', () => {
         // At exactly timeTo99, branch is (duration <= timeTo99) → normal power only
         const energyTo99 = (99 - 50) * capacity / 100; // 49 kWh
-        const powerNormal = (volts * amps) / 1000;      // 7.36 kW
+        const powerNormal = chargingPowerKw;
         const timeTo99 = energyTo99 / powerNormal;
-        const result = calculateEnergyAdded(capacity, 50, volts, amps, timeTo99);
+        const result = calculateEnergyAdded(capacity, 50, chargingPowerKw, timeTo99);
         expect(result).toBeCloseTo(49, 3);
     });
 
-    it('should calculate correctly with 110V (different voltage)', () => {
-        // powerNormal = 110 * 32 / 1000 = 3.52 kW; 1 hour below 99%
-        const result = calculateEnergyAdded(capacity, 50, 110, amps, 1);
+    it('should calculate correctly with a different charging power', () => {
+        const result = calculateEnergyAdded(capacity, 50, 3.52, 1);
         expect(result).toBeCloseTo(3.52, 3);
     });
 
-    it('should use 110V trickle power when voltage is 110V', () => {
-        // trickle = 110 * 5 / 1000 = 0.55 kW; 0.1h; cap = 0.5 kWh
-        // energy = 0.55 * 0.1 = 0.055 kWh (below cap)
-        const result = calculateEnergyAdded(capacity, 99.5, 110, amps, 0.1);
+    it('should use the normal power as trickle when charging power is below 1.15 kW', () => {
+        const result = calculateEnergyAdded(capacity, 99.5, 0.55, 0.1);
         expect(result).toBeCloseTo(0.055, 3);
     });
 
-    it('should return 0 when amps is 0 (no charging power)', () => {
-        // With 0 amps, powerNormal=0 so timeTo99=Infinity; the normal-charging
+    it('should return 0 when charging power is 0 (no charging power)', () => {
+        // With 0 kW, powerNormal=0 so timeTo99=Infinity; the normal-charging
         // branch is always taken and returns powerNormal * duration = 0.
-        const result = calculateEnergyAdded(capacity, 50, volts, 0, 1);
+        const result = calculateEnergyAdded(capacity, 50, 0, 1);
         expect(result).toBeCloseTo(0, 3);
     });
 });
@@ -184,7 +180,7 @@ describe('charging cost helpers', () => {
 
 describe('target planning helpers', () => {
     it('calculates time and energy to a target below 99%', () => {
-        const result = calculateTimeAndEnergyToTarget(72, 50, 80, 230, 10, 0.9);
+        const result = calculateTimeAndEnergyToTarget(72, 50, 80, 2.3, 0.9);
 
         expect(result.targetSoC).toBe(80);
         expect(result.batteryEnergyKwh).toBeCloseTo(21.6, 3);
@@ -194,7 +190,7 @@ describe('target planning helpers', () => {
     });
 
     it('calculates time and energy when the target crosses into trickle charging', () => {
-        const result = calculateTimeAndEnergyToTarget(100, 98, 100, 230, 32);
+        const result = calculateTimeAndEnergyToTarget(100, 98, 100, 7.36);
 
         expect(result.targetSoC).toBe(100);
         expect(result.batteryEnergyKwh).toBeCloseTo(2, 3);
@@ -204,7 +200,7 @@ describe('target planning helpers', () => {
     });
 
     it('treats a target below current SoC as the current SoC', () => {
-        const result = calculateTimeAndEnergyToTarget(72, 60, 50, 230, 10);
+        const result = calculateTimeAndEnergyToTarget(72, 60, 50, 2.3);
 
         expect(result.targetSoC).toBe(60);
         expect(result.batteryEnergyKwh).toBe(0);
@@ -214,7 +210,7 @@ describe('target planning helpers', () => {
     });
 
     it('returns an unreachable target result when there is no charging power', () => {
-        const result = calculateTimeAndEnergyToTarget(72, 50, 80, 230, 0);
+        const result = calculateTimeAndEnergyToTarget(72, 50, 80, 0);
 
         expect(result.batteryEnergyKwh).toBeCloseTo(21.6, 3);
         expect(result.timeHours).toBe(Infinity);
@@ -224,7 +220,7 @@ describe('target planning helpers', () => {
 
 describe('duration planning helpers', () => {
     it('calculates reachable SoC for a duration that stays below 99%', () => {
-        const result = calculateReachableSoCForDuration(72, 50, 230, 10, 2, 0.9);
+        const result = calculateReachableSoCForDuration(72, 50, 2.3, 2, 0.9);
 
         expect(result.achievedSoC).toBeCloseTo(56.388889, 5);
         expect(result.batteryEnergyKwh).toBeCloseTo(4.6, 3);
@@ -233,7 +229,7 @@ describe('duration planning helpers', () => {
     });
 
     it('calculates reachable SoC for a duration that enters trickle charging', () => {
-        const result = calculateReachableSoCForDuration(100, 98, 230, 32, 1);
+        const result = calculateReachableSoCForDuration(100, 98, 7.36, 1);
 
         expect(result.achievedSoC).toBeCloseTo(99.99375, 5);
         expect(result.batteryEnergyKwh).toBeCloseTo(1.99375, 5);
@@ -241,7 +237,7 @@ describe('duration planning helpers', () => {
     });
 
     it('returns the current SoC when there is no available duration', () => {
-        const result = calculateReachableSoCForDuration(72, 50, 230, 10, 0);
+        const result = calculateReachableSoCForDuration(72, 50, 2.3, 0);
 
         expect(result.achievedSoC).toBe(50);
         expect(result.batteryEnergyKwh).toBe(0);
@@ -249,7 +245,7 @@ describe('duration planning helpers', () => {
     });
 
     it('returns the current SoC when there is no charging power', () => {
-        const result = calculateReachableSoCForDuration(72, 50, 230, 0, 4);
+        const result = calculateReachableSoCForDuration(72, 50, 0, 4);
 
         expect(result.achievedSoC).toBe(50);
         expect(result.batteryEnergyKwh).toBe(0);
@@ -263,8 +259,7 @@ describe('calculateChargePlan', () => {
             usableCapacity: 72,
             currentSoC: 50,
             targetSoC: 80,
-            volts: 230,
-            amps: 10,
+            chargingPowerKw: 2.3,
             chargingEfficiency: 0.9,
         });
 
@@ -283,8 +278,7 @@ describe('calculateChargePlan', () => {
             usableCapacity: 72,
             currentSoC: 50,
             targetSoC: 80,
-            volts: 230,
-            amps: 10,
+            chargingPowerKw: 2.3,
             availableDurationHours: 10,
         });
 
@@ -300,8 +294,7 @@ describe('calculateChargePlan', () => {
             usableCapacity: 72,
             currentSoC: 50,
             targetSoC: 80,
-            volts: 230,
-            amps: 10,
+            chargingPowerKw: 2.3,
             availableDurationHours: 2,
             chargingEfficiency: 0.9,
         });
@@ -318,8 +311,7 @@ describe('calculateChargePlan', () => {
             usableCapacity: 72,
             currentSoC: 50,
             targetSoC: 80,
-            volts: 230,
-            amps: 10,
+            chargingPowerKw: 2.3,
             availableDurationHours: 0,
         });
 

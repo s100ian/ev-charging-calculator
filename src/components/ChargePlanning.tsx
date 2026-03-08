@@ -1,4 +1,5 @@
 import React from "react";
+import SliderField from "./SliderField";
 
 interface ChargePlanningProps {
   currentSoC: number;
@@ -8,7 +9,7 @@ interface ChargePlanningProps {
   setDepartureTime: (value: string) => void;
 }
 
-const presetTargets = [80, 90, 100];
+const presetTargets = [60, 80, 100];
 
 const ChargePlanning: React.FC<ChargePlanningProps> = ({
   currentSoC,
@@ -23,8 +24,8 @@ const ChargePlanning: React.FC<ChargePlanningProps> = ({
     return Math.min(100, Math.max(minTargetSoC, value));
   };
 
-  const handleTargetSoCChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTargetSoC(clampTargetSoC(parseInt(e.target.value, 10)));
+  const handleTargetSoCChange = (value: number) => {
+    setTargetSoC(clampTargetSoC(Math.round(value)));
   };
 
   const handleTargetSoCDecrement = () => {
@@ -42,60 +43,26 @@ const ChargePlanning: React.FC<ChargePlanningProps> = ({
   return (
     <div className="input-section charge-planning-container">
       <h2>Charge Planning</h2>
-      <div className="slider-group" data-testid="target-soc-group">
-        <label className="slider-label" htmlFor="target-soc-slider">
-          Target SoC (%): <span className="slider-value">{targetSoC}</span>
-        </label>
-        <div className="slider-controls">
-          <button
-            className="control-button"
-            onClick={handleTargetSoCDecrement}
-            type="button"
-          >
-            -
-          </button>
-          <input
-            id="target-soc-slider"
-            type="range"
-            min={minTargetSoC}
-            max="100"
-            value={targetSoC}
-            onChange={handleTargetSoCChange}
-            className="slider-input"
-            data-testid="target-soc-slider"
-          />
-          <button
-            className="control-button"
-            onClick={handleTargetSoCIncrement}
-            type="button"
-          >
-            +
-          </button>
-        </div>
-      </div>
-      <div className="field-group" data-testid="target-presets-group">
-        <span className="field-label">Quick targets</span>
-        <div className="currency-button-group" role="group" aria-label="Quick target SoC presets">
-          {presetTargets.map((preset) => {
-            const effectivePreset = clampTargetSoC(preset);
-            const isDisabled = preset < minTargetSoC;
-            const isActive = !isDisabled && targetSoC === effectivePreset;
-
-            return (
-              <button
-                key={preset}
-                type="button"
-                className={`currency-button${isActive ? " currency-button--active" : ""}`}
-                aria-pressed={isActive}
-                disabled={isDisabled}
-                onClick={() => setTargetSoC(effectivePreset)}
-              >
-                {preset}%
-              </button>
-            );
-          })}
-        </div>
-      </div>
+      <SliderField
+        groupTestId="target-soc-group"
+        label="Target SoC (%)"
+        value={targetSoC}
+        sliderId="target-soc-slider"
+        sliderTestId="target-soc-slider"
+        min={minTargetSoC}
+        max={100}
+        onSliderChange={handleTargetSoCChange}
+        onDecrement={handleTargetSoCDecrement}
+        onIncrement={handleTargetSoCIncrement}
+        quickSetGroupTestId="target-presets-group"
+        quickSetLabel="Quick targets"
+        quickSetAriaLabel="Quick target SoC presets"
+        quickSetOptions={presetTargets.map((preset) => ({
+          label: `${preset}`,
+          value: clampTargetSoC(preset),
+          disabled: preset < minTargetSoC,
+        }))}
+      />
       <div className="field-group" data-testid="departure-time-group">
         <label className="field-label" htmlFor="departure-time-input">
           Departure time (optional)

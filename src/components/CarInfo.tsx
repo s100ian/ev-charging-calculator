@@ -1,4 +1,5 @@
 import React from "react";
+import SliderField from "./SliderField";
 
 interface CarInfoProps {
   usableCapacity: number;
@@ -36,96 +37,42 @@ const CarInfo: React.FC<CarInfoProps> = ({
   return (
     <div className="input-section car-info-container">
       <h2>Car Information</h2>
-      <div className="slider-group" data-testid="usable-capacity-group">
-        <label className="slider-label">
-          Usable battery capacity (kWh):{" "}
-          <span className="slider-value">{usableCapacity}</span>
-        </label>
-        <div className="slider-controls">
-          <button
-            className="control-button"
-            onClick={() =>
-              handleDecrement(setUsableCapacity, usableCapacity, 5)
-            }
-          >
-            -
-          </button>
-          <input
-            type="range"
-            min="5"
-            max="200"
-            value={usableCapacity}
-            onChange={(e) => setUsableCapacity(parseInt(e.target.value, 10))}
-            className="slider-input"
-            data-testid="usable-capacity-slider"
-          />
-          <button
-            className="control-button"
-            onClick={() =>
-              handleIncrement(setUsableCapacity, usableCapacity, 200)
-            }
-          >
-            +
-          </button>
-        </div>
-      </div>
-      <div className="slider-group" data-testid="consumption-group">
-        <label className="slider-label">
-          Consumption (kWh/100km):{" "}
-          <span className="slider-value">{consumption}</span>
-        </label>
-        <div className="slider-controls">
-          <button
-            className="control-button"
-            onClick={() => handleDecrement(setConsumption, consumption, 5)}
-          >
-            -
-          </button>
-          <input
-            type="range"
-            min="5"
-            max="50"
-            value={consumption}
-            onChange={(e) => setConsumption(parseInt(e.target.value, 10))}
-            className="slider-input"
-            data-testid="consumption-slider"
-          />
-          <button
-            className="control-button"
-            onClick={() => handleIncrement(setConsumption, consumption, 50)}
-          >
-            +
-          </button>
-        </div>
-      </div>
-      <div className="slider-group" data-testid="current-soc-group">
-        <label className="slider-label">
-          Current SoC (%): <span className="slider-value">{currentSoC}</span>
-        </label>
-        <div className="slider-controls">
-          <button
-            className="control-button"
-            onClick={() => handleDecrement(setCurrentSoC, currentSoC, 0)}
-          >
-            -
-          </button>
-          <input
-            type="range"
-            min="0"
-            max="100"
-            value={currentSoC}
-            onChange={(e) => setCurrentSoC(parseInt(e.target.value, 10))}
-            className="slider-input"
-            data-testid="current-soc-slider"
-          />
-          <button
-            className="control-button"
-            onClick={() => handleIncrement(setCurrentSoC, currentSoC, 100)}
-          >
-            +
-          </button>
-        </div>
-      </div>
+      <SliderField
+        groupTestId="usable-capacity-group"
+        label="Usable battery capacity (kWh)"
+        value={usableCapacity}
+        sliderId="usable-capacity-slider"
+        sliderTestId="usable-capacity-slider"
+        min={5}
+        max={200}
+        onSliderChange={setUsableCapacity}
+        onDecrement={() => handleDecrement(setUsableCapacity, usableCapacity, 5)}
+        onIncrement={() => handleIncrement(setUsableCapacity, usableCapacity, 200)}
+      />
+      <SliderField
+        groupTestId="consumption-group"
+        label="Consumption (kWh/100km)"
+        value={consumption}
+        sliderId="consumption-slider"
+        sliderTestId="consumption-slider"
+        min={5}
+        max={50}
+        onSliderChange={setConsumption}
+        onDecrement={() => handleDecrement(setConsumption, consumption, 5)}
+        onIncrement={() => handleIncrement(setConsumption, consumption, 50)}
+      />
+      <SliderField
+        groupTestId="current-soc-group"
+        label="Current SoC (%)"
+        value={currentSoC}
+        sliderId="current-soc-slider"
+        sliderTestId="current-soc-slider"
+        min={0}
+        max={100}
+        onSliderChange={setCurrentSoC}
+        onDecrement={() => handleDecrement(setCurrentSoC, currentSoC, 0)}
+        onIncrement={() => handleIncrement(setCurrentSoC, currentSoC, 100)}
+      />
     </div>
   );
 };

@@ -1,20 +1,22 @@
 import { useEffect, useState } from "react";
 import packageJson from "../package.json"; // Import package.json
 import ChargePlanning from "./components/ChargePlanning";
-import ChargingCost from "./components/ChargingCost";
 import CostResults from "./components/CostResults";
 import "./App.css";
 import CarInfo from "./components/CarInfo";
 import ChargingDetails from "./components/ChargingDetails";
 import PlanningResults from "./components/PlanningResults";
+import ResultsDisplay from "./components/ResultsDisplay";
 import { ThemeProvider } from "./context/ThemeContext";
 import ThemeToggle from "./components/ThemeToggle";
 import { useChargePlan } from "./hooks/useChargePlan";
 import { useChargingResults } from "./hooks/useChargingResults";
 import PwaBanner from "./components/PwaBanner";
-import ResultsDisplay from "./components/ResultsDisplay";
-import { getInitialCurrencySymbol } from "./utils/currency";
 import {
+  getInitialCurrencySymbol,
+} from "./utils/currency";
+import {
+  getInitialChargingPowerKw,
   getInitialState,
   getInitialTextState,
   persistCalculatorState,
@@ -33,11 +35,12 @@ function AppContent() {
   ); // %
 
   // Charging Details State - Initialize from localStorage or use defaults
-  const [volts, setVolts] = useState(() => getInitialState("volts", 230)); // V
+  const [chargingPowerKw, setChargingPowerKw] = useState(() =>
+    getInitialChargingPowerKw(2.3)
+  );
   const [duration, setDuration] = useState(() =>
     getInitialState("duration", 8)
   ); // hours
-  const [amps, setAmps] = useState(() => getInitialState("amps", 10)); // A
   const [targetSoC, setTargetSoC] = useState(() =>
     Math.min(100, Math.max(0, getInitialState("targetSoC", 80)))
   );
@@ -52,14 +55,13 @@ function AppContent() {
   );
   const { chargePlan, planningSummary, readyAtLabel, targetCost, rangeAtTargetKm } =
     useChargePlan({
-      amps,
+      chargingPowerKw,
       consumption,
       currentSoC,
       departureTime,
       pricePerKwh,
       targetSoC,
       usableCapacity,
-      volts,
     });
 
   const {
@@ -74,20 +76,19 @@ function AppContent() {
     socAfterCharging,
     totalRange,
   } = useChargingResults({
-    amps,
+    chargingPowerKw,
     consumption,
     currencySymbol,
     currentSoC,
     duration,
     pricePerKwh,
     usableCapacity,
-    volts,
   });
 
   // Persist inputs to localStorage
   useEffect(() => {
     persistCalculatorState({
-      amps,
+      chargingPowerKw,
       consumption,
       currencySymbol,
       currentSoC,
@@ -96,15 +97,13 @@ function AppContent() {
       pricePerKwh,
       targetSoC,
       usableCapacity,
-      volts,
     });
   }, [
     usableCapacity,
     consumption,
-    volts,
+    chargingPowerKw,
     duration,
     currentSoC,
-    amps,
     pricePerKwh,
     currencySymbol,
     targetSoC,
@@ -130,12 +129,14 @@ function AppContent() {
         setCurrentSoC={setCurrentSoC} // Pass setCurrentSoC
       />
       <ChargingDetails
-        volts={volts}
-        setVolts={setVolts}
+        chargingPowerKw={chargingPowerKw}
+        setChargingPowerKw={setChargingPowerKw}
         duration={duration}
         setDuration={setDuration}
-        amps={amps}
-        setAmps={setAmps}
+        pricePerKwh={pricePerKwh}
+        setPricePerKwh={setPricePerKwh}
+        currencySymbol={currencySymbol}
+        setCurrencySymbol={setCurrencySymbol}
       />
       <ChargePlanning
         currentSoC={currentSoC}
@@ -143,12 +144,6 @@ function AppContent() {
         setTargetSoC={setTargetSoC}
         departureTime={departureTime}
         setDepartureTime={setDepartureTime}
-      />
-      <ChargingCost
-        pricePerKwh={pricePerKwh}
-        setPricePerKwh={setPricePerKwh}
-        currencySymbol={currencySymbol}
-        setCurrencySymbol={setCurrencySymbol}
       />
       <ResultsDisplay
         socAfterCharging={socAfterCharging}
