@@ -7,6 +7,39 @@ export const getInitialState = (key: string, defaultValue: number): number => {
   }
 };
 
+const getStoredNumber = (key: string): number | null => {
+  try {
+    const storedValue = localStorage.getItem(key);
+
+    if (storedValue === null) {
+      return null;
+    }
+
+    const parsedValue = parseFloat(storedValue);
+
+    return Number.isFinite(parsedValue) ? parsedValue : null;
+  } catch {
+    return null;
+  }
+};
+
+export const getInitialChargingPowerKw = (defaultValue: number): number => {
+  const storedChargingPowerKw = getStoredNumber("chargingPowerKw");
+
+  if (storedChargingPowerKw !== null) {
+    return storedChargingPowerKw;
+  }
+
+  const storedVolts = getStoredNumber("volts");
+  const storedAmps = getStoredNumber("amps");
+
+  if (storedVolts !== null && storedAmps !== null) {
+    return (storedVolts * storedAmps) / 1000;
+  }
+
+  return defaultValue;
+};
+
 export const getInitialTextState = (key: string, defaultValue: string): string => {
   try {
     return localStorage.getItem(key) ?? defaultValue;
@@ -16,7 +49,7 @@ export const getInitialTextState = (key: string, defaultValue: string): string =
 };
 
 interface PersistCalculatorStateOptions {
-  amps: number;
+  chargingPowerKw: number;
   consumption: number;
   currencySymbol: string;
   currentSoC: number;
@@ -25,11 +58,10 @@ interface PersistCalculatorStateOptions {
   pricePerKwh: string;
   targetSoC: number;
   usableCapacity: number;
-  volts: number;
 }
 
 export const persistCalculatorState = ({
-  amps,
+  chargingPowerKw,
   consumption,
   currencySymbol,
   currentSoC,
@@ -38,16 +70,16 @@ export const persistCalculatorState = ({
   pricePerKwh,
   targetSoC,
   usableCapacity,
-  volts,
 }: PersistCalculatorStateOptions): void => {
   try {
     localStorage.setItem("usableCapacity", usableCapacity.toString());
     localStorage.setItem("consumption", consumption.toString());
-    localStorage.setItem("volts", volts.toString());
+    localStorage.setItem("chargingPowerKw", chargingPowerKw.toString());
     localStorage.setItem("duration", duration.toString());
     localStorage.setItem("currentSoC", currentSoC.toString());
-    localStorage.setItem("amps", amps.toString());
     localStorage.setItem("targetSoC", targetSoC.toString());
+    localStorage.removeItem("volts");
+    localStorage.removeItem("amps");
 
     if (pricePerKwh.trim() === "") {
       localStorage.removeItem("pricePerKwh");

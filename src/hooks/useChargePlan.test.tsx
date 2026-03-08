@@ -13,14 +13,13 @@ describe("useChargePlan", () => {
 
     const { result } = renderHook(() =>
       useChargePlan({
-        amps: 10,
+        chargingPowerKw: 2.3,
         consumption: 18,
         currentSoC: 50,
         departureTime: "",
         pricePerKwh: "0.25",
         targetSoC: 80,
         usableCapacity: 72,
-        volts: 230,
       })
     );
 
@@ -38,14 +37,13 @@ describe("useChargePlan", () => {
 
     const { result } = renderHook(() =>
       useChargePlan({
-        amps: 10,
+        chargingPowerKw: 2.3,
         consumption: 18,
         currentSoC: 50,
         departureTime: "22:00",
         pricePerKwh: "0.25",
         targetSoC: 80,
         usableCapacity: 72,
-        volts: 230,
       })
     );
 
@@ -62,14 +60,13 @@ describe("useChargePlan", () => {
 
     const { result } = renderHook(() =>
       useChargePlan({
-        amps: 10,
+        chargingPowerKw: 2.3,
         consumption: 18,
         currentSoC: 50,
         departureTime: "13:00",
         pricePerKwh: "0.25",
         targetSoC: 90,
         usableCapacity: 72,
-        volts: 230,
       })
     );
 

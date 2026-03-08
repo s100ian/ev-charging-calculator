@@ -157,12 +157,12 @@ test.describe("EV Charging Calculator", () => {
   });
 
   test("slider interaction updates results", async ({ page }) => {
-    const ampsSlider = page.locator('[data-testid="amps-slider"]');
-    await ampsSlider.fill("16");
+    const chargingPowerSlider = page.locator('[data-testid="charging-power-slider"]');
+    await chargingPowerSlider.fill("3.7");
 
-    // Charging power should update: (230 * 16) / 1000 = 3.68 kW
+    // Charging power should update to the selected kW value.
     const chargingPower = page.locator(".result-value").nth(1);
-    await expect(chargingPower).toHaveText("3.68 kW");
+    await expect(chargingPower).toHaveText("3.70 kW");
   });
 
   test("button interaction updates results", async ({ page }) => {
@@ -178,9 +178,9 @@ test.describe("EV Charging Calculator", () => {
   });
 
   test("localStorage persistence", async ({ page }) => {
-    // Change amps via slider
-    const ampsSlider = page.locator('[data-testid="amps-slider"]');
-    await ampsSlider.fill("20");
+    // Change charging power via slider.
+    const chargingPowerSlider = page.locator('[data-testid="charging-power-slider"]');
+    await chargingPowerSlider.fill("4.6");
 
     // Verify the value took effect
     const chargingPower = page.locator(".result-value").nth(1);
@@ -233,13 +233,11 @@ test.describe("EV Charging Calculator", () => {
     await expect(totalRange).toHaveText("360 km");
   });
 
-  test("volts slider change updates charging power", async ({ page }) => {
-    // chargingPower = (110 * 10) / 1000 = 1.10 kW
-    const voltsSlider = page.locator('[data-testid="volts-slider"]');
-    await voltsSlider.fill("110");
+  test("quick-set charging power updates charging power", async ({ page }) => {
+    await page.getByRole("button", { name: "7.4" }).click();
 
     const chargingPower = page.locator(".result-value").nth(1);
-    await expect(chargingPower).toHaveText("1.10 kW");
+    await expect(chargingPower).toHaveText("7.40 kW");
   });
 
   test("duration + button increases range per session", async ({ page }) => {
@@ -265,11 +263,10 @@ test.describe("EV Charging Calculator", () => {
     await expect(totalRange).toHaveText("394 km");
   });
 
-  test("label value updates when slider changes", async ({ page }) => {
-    const ampsSlider = page.locator('[data-testid="amps-slider"]');
-    await ampsSlider.fill("20");
+  test("charging power slider value updates when changed", async ({ page }) => {
+    const chargingPowerSlider = page.locator('[data-testid="charging-power-slider"]');
+    await chargingPowerSlider.fill("7.4");
 
-    const ampsGroup = page.locator('[data-testid="amps-group"]');
-    await expect(ampsGroup).toContainText("20");
+    await expect(chargingPowerSlider).toHaveValue("7.4");
   });
 });

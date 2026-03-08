@@ -1,12 +1,11 @@
 
 const TRICKLE_SOC_THRESHOLD = 99;
-const TRICKLE_AMPS = 5;
+const TRICKLE_POWER_KW = 1.15;
 
 export function calculateEnergyAdded(
     usableCapacity: number,
     currentSoC: number,
-    volts: number,
-    amps: number,
+    chargingPowerKw: number,
     duration: number
 ): number {
     const capacityKwh = usableCapacity;
@@ -17,7 +16,7 @@ export function calculateEnergyAdded(
     const energyTo99 = Math.max(0, ((targetSoC99 - startSoC) * capacityKwh) / 100);
 
     // Power at normal amps
-    const powerNormal = (volts * amps) / 1000;
+    const powerNormal = getNormalChargingPowerKw(chargingPowerKw);
 
     // Time to reach 99% at normal power
     const timeTo99 = powerNormal > 0 ? energyTo99 / powerNormal : Infinity;
@@ -32,7 +31,7 @@ export function calculateEnergyAdded(
 
         // 2. Remaining time at trickle power (5A)
         const remainingTime = duration - timeTo99;
-        const powerTrickle = (volts * 5) / 1000; // Fixed 5A
+        const powerTrickle = getTrickleChargingPowerKw(powerNormal); // Fixed 5A
 
         totalEnergy += powerTrickle * remainingTime;
 
@@ -61,8 +60,7 @@ export interface ChargePlanInput {
     usableCapacity: number;
     currentSoC: number;
     targetSoC: number;
-    volts: number;
-    amps: number;
+    chargingPowerKw: number;
     availableDurationHours?: number | null;
     chargingEfficiency?: number;
 }
@@ -85,14 +83,13 @@ export function calculateTimeAndEnergyToTarget(
     usableCapacity: number,
     currentSoC: number,
     targetSoC: number,
-    volts: number,
-    amps: number,
+    chargingPowerKw: number,
     chargingEfficiency: number = 1
 ): TimeAndEnergyToTargetResult {
     const safeCurrentSoC = clampPercentage(currentSoC);
     const safeTargetSoC = Math.max(safeCurrentSoC, clampPercentage(targetSoC));
-    const normalPowerKw = getNormalChargingPowerKw(volts, amps);
-    const tricklePowerKw = getTrickleChargingPowerKw(volts, normalPowerKw);
+    const normalPowerKw = getNormalChargingPowerKw(chargingPowerKw);
+    const tricklePowerKw = getTrickleChargingPowerKw(normalPowerKw);
     const normalPhaseTargetSoC = Math.min(safeTargetSoC, TRICKLE_SOC_THRESHOLD);
     const tricklePhaseStartSoC = Math.max(safeCurrentSoC, TRICKLE_SOC_THRESHOLD);
     const batteryEnergyNormalKwh = calculateBatteryEnergyBetweenSoC(
@@ -135,16 +132,15 @@ export function calculateTimeAndEnergyToTarget(
 export function calculateReachableSoCForDuration(
     usableCapacity: number,
     currentSoC: number,
-    volts: number,
-    amps: number,
+    chargingPowerKw: number,
     durationHours: number,
     chargingEfficiency: number = 1
 ): ReachableSoCForDurationResult {
     const safeCurrentSoC = clampPercentage(currentSoC);
     const safeUsableCapacity = Math.max(0, usableCapacity);
     const safeDurationHours = Math.max(0, durationHours);
-    const normalPowerKw = getNormalChargingPowerKw(volts, amps);
-    const tricklePowerKw = getTrickleChargingPowerKw(volts, normalPowerKw);
+    const normalPowerKw = getNormalChargingPowerKw(chargingPowerKw);
+    const tricklePowerKw = getTrickleChargingPowerKw(normalPowerKw);
 
     if (safeDurationHours === 0 || safeUsableCapacity === 0 || normalPowerKw <= 0) {
         return {
@@ -197,8 +193,7 @@ export function calculateChargePlan(
         input.usableCapacity,
         input.currentSoC,
         input.targetSoC,
-        input.volts,
-        input.amps,
+        input.chargingPowerKw,
         chargingEfficiency
     );
     const safeAvailableDurationHours = input.availableDurationHours == null
@@ -240,8 +235,7 @@ export function calculateChargePlan(
     const departureResult = calculateReachableSoCForDuration(
         input.usableCapacity,
         input.currentSoC,
-        input.volts,
-        input.amps,
+        input.chargingPowerKw,
         safeAvailableDurationHours,
         chargingEfficiency
     );
@@ -280,16 +274,16 @@ function calculateBatteryEnergyBetweenSoC(
     return Math.max(0, ((safeEndSoC - safeStartSoC) * safeUsableCapacity) / 100);
 }
 
-function getNormalChargingPowerKw(volts: number, amps: number): number {
-    return Math.max(0, (volts * amps) / 1000);
+function getNormalChargingPowerKw(chargingPowerKw: number): number {
+    return Math.max(0, chargingPowerKw);
 }
 
-function getTrickleChargingPowerKw(volts: number, normalPowerKw: number): number {
+function getTrickleChargingPowerKw(normalPowerKw: number): number {
     if (normalPowerKw <= 0) {
         return 0;
     }
 
-    return Math.max(0, (volts * TRICKLE_AMPS) / 1000);
+    return Math.min(normalPowerKw, TRICKLE_POWER_KW);
 }
 
 export interface FixedTariffPricing {

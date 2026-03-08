@@ -3,12 +3,14 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import ChargingDetails from "./ChargingDetails";
 
 const defaultProps = {
-  volts: 230,
-  setVolts: vi.fn(),
+  chargingPowerKw: 2.3,
+  setChargingPowerKw: vi.fn(),
   duration: 8.0,
   setDuration: vi.fn(),
-  amps: 10,
-  setAmps: vi.fn(),
+  pricePerKwh: "0.25",
+  setPricePerKwh: vi.fn(),
+  currencySymbol: "€" as const,
+  setCurrencySymbol: vi.fn(),
 };
 
 describe("ChargingDetails", () => {
@@ -21,14 +23,9 @@ describe("ChargingDetails", () => {
     expect(screen.getByText("Charging Details")).toBeInTheDocument();
   });
 
-  it("displays current volts value", () => {
+  it("displays current charging power value", () => {
     render(<ChargingDetails {...defaultProps} />);
-    expect(screen.getByTestId("volts-group")).toHaveTextContent("230");
-  });
-
-  it("displays current amps value", () => {
-    render(<ChargingDetails {...defaultProps} />);
-    expect(screen.getByTestId("amps-group")).toHaveTextContent("10");
+    expect(screen.getByTestId("charging-power-group")).toHaveTextContent("2.3");
   });
 
   it("displays current duration value with one decimal", () => {
@@ -36,78 +33,60 @@ describe("ChargingDetails", () => {
     expect(screen.getByTestId("duration-group")).toHaveTextContent("8.0");
   });
 
-  // Volts
-  it("volts + button calls setVolts with value + 1", () => {
-    const setVolts = vi.fn();
-    render(<ChargingDetails {...defaultProps} setVolts={setVolts} />);
-    const plusButton = within(screen.getByTestId("volts-group")).getByText("+");
+  it("renders charging cost inputs inside Charging Details", () => {
+    render(<ChargingDetails {...defaultProps} />);
+    expect(screen.getByLabelText("Fixed tariff (€/kWh)")).toHaveValue(0.25);
+    expect(screen.getByRole("button", { name: "€" })).toHaveAttribute(
+      "aria-pressed",
+      "true"
+    );
+  });
+
+  it("calls setChargingPowerKw when the slider changes", () => {
+    const setChargingPowerKw = vi.fn();
+
+    render(<ChargingDetails {...defaultProps} setChargingPowerKw={setChargingPowerKw} />);
+
+    fireEvent.change(screen.getByTestId("charging-power-slider"), {
+      target: { value: "7.4" },
+    });
+
+    expect(setChargingPowerKw).toHaveBeenCalledWith(7.4);
+  });
+
+  it("renders the charging power quick-set buttons", () => {
+    render(<ChargingDetails {...defaultProps} />);
+
+    expect(screen.getByRole("button", { name: "2.3" })).toHaveAttribute(
+      "aria-pressed",
+      "true"
+    );
+    expect(screen.getByRole("button", { name: "4.6" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "7.4" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "11.0" })).not.toBeInTheDocument();
+  });
+
+  it("calls setChargingPowerKw when a quick-set button is clicked", () => {
+    const setChargingPowerKw = vi.fn();
+
+    render(<ChargingDetails {...defaultProps} setChargingPowerKw={setChargingPowerKw} />);
+
+    fireEvent.click(screen.getByRole("button", { name: "7.4" }));
+
+    expect(setChargingPowerKw).toHaveBeenCalledWith(7.4);
+  });
+
+  it("charging power + button clamps at maximum (7.4)", () => {
+    const setChargingPowerKw = vi.fn();
+
+    render(
+      <ChargingDetails {...defaultProps} chargingPowerKw={7.4} setChargingPowerKw={setChargingPowerKw} />
+    );
+
+    const plusButton = within(screen.getByTestId("charging-power-group")).getByText("+");
     fireEvent.click(plusButton);
-    expect(setVolts).toHaveBeenCalledWith(231);
-  });
 
-  it("volts - button calls setVolts with value - 1", () => {
-    const setVolts = vi.fn();
-    render(<ChargingDetails {...defaultProps} setVolts={setVolts} />);
-    const minusButton = within(screen.getByTestId("volts-group")).getByText("-");
-    fireEvent.click(minusButton);
-    expect(setVolts).toHaveBeenCalledWith(229);
-  });
-
-  it("volts - button clamps at minimum (110)", () => {
-    const setVolts = vi.fn();
-    render(<ChargingDetails {...defaultProps} volts={110} setVolts={setVolts} />);
-    const minusButton = within(screen.getByTestId("volts-group")).getByText("-");
-    fireEvent.click(minusButton);
-    expect(setVolts).toHaveBeenCalledWith(110);
-  });
-
-  it("volts + button clamps at maximum (240)", () => {
-    const setVolts = vi.fn();
-    render(<ChargingDetails {...defaultProps} volts={240} setVolts={setVolts} />);
-    const plusButton = within(screen.getByTestId("volts-group")).getByText("+");
-    fireEvent.click(plusButton);
-    expect(setVolts).toHaveBeenCalledWith(240);
-  });
-
-  it("volts slider onChange calls setVolts with parsed int", () => {
-    const setVolts = vi.fn();
-    render(<ChargingDetails {...defaultProps} setVolts={setVolts} />);
-    const slider = screen.getByTestId("volts-slider");
-    fireEvent.change(slider, { target: { value: "120" } });
-    expect(setVolts).toHaveBeenCalledWith(120);
-  });
-
-  // Amps
-  it("amps + button calls setAmps with value + 1", () => {
-    const setAmps = vi.fn();
-    render(<ChargingDetails {...defaultProps} setAmps={setAmps} />);
-    const plusButton = within(screen.getByTestId("amps-group")).getByText("+");
-    fireEvent.click(plusButton);
-    expect(setAmps).toHaveBeenCalledWith(11);
-  });
-
-  it("amps - button clamps at minimum (5)", () => {
-    const setAmps = vi.fn();
-    render(<ChargingDetails {...defaultProps} amps={5} setAmps={setAmps} />);
-    const minusButton = within(screen.getByTestId("amps-group")).getByText("-");
-    fireEvent.click(minusButton);
-    expect(setAmps).toHaveBeenCalledWith(5);
-  });
-
-  it("amps + button clamps at maximum (32)", () => {
-    const setAmps = vi.fn();
-    render(<ChargingDetails {...defaultProps} amps={32} setAmps={setAmps} />);
-    const plusButton = within(screen.getByTestId("amps-group")).getByText("+");
-    fireEvent.click(plusButton);
-    expect(setAmps).toHaveBeenCalledWith(32);
-  });
-
-  it("amps slider onChange calls setAmps with parsed int", () => {
-    const setAmps = vi.fn();
-    render(<ChargingDetails {...defaultProps} setAmps={setAmps} />);
-    const slider = screen.getByTestId("amps-slider");
-    fireEvent.change(slider, { target: { value: "16" } });
-    expect(setAmps).toHaveBeenCalledWith(16);
+    expect(setChargingPowerKw).toHaveBeenCalledWith(7.4);
   });
 
   // Duration (step 0.1, toFixed(1))
@@ -149,5 +128,35 @@ describe("ChargingDetails", () => {
     const slider = screen.getByTestId("duration-slider");
     fireEvent.change(slider, { target: { value: "12.5" } });
     expect(setDuration).toHaveBeenCalledWith(12.5);
+  });
+
+  it("calls setPricePerKwh when the price changes", () => {
+    const setPricePerKwh = vi.fn();
+
+    render(
+      <ChargingDetails {...defaultProps} pricePerKwh="" setPricePerKwh={setPricePerKwh} />
+    );
+
+    fireEvent.change(screen.getByLabelText("Fixed tariff (€/kWh)"), {
+      target: { value: "0.31" },
+    });
+
+    expect(setPricePerKwh).toHaveBeenCalledWith("0.31");
+  });
+
+  it("calls setCurrencySymbol when a currency button is clicked", () => {
+    const setCurrencySymbol = vi.fn();
+
+    render(
+      <ChargingDetails
+        {...defaultProps}
+        currencySymbol="€"
+        setCurrencySymbol={setCurrencySymbol}
+      />
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "£" }));
+
+    expect(setCurrencySymbol).toHaveBeenCalledWith("£");
   });
 });

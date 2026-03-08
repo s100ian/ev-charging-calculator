@@ -7,36 +7,31 @@ import {
   calculateSessionWallEnergy,
   parseFixedTariffPricing,
 } from "../utils/calculations";
-import {
-  guessCurrencySymbol,
-  normalizeCurrencySymbol,
-} from "../utils/currency";
+import { normalizeCurrencySymbol } from "../utils/currency";
 
 interface UseChargingResultsOptions {
-  amps: number;
+  chargingPowerKw: number;
   consumption: number;
   currencySymbol: string;
   currentSoC: number;
   duration: number;
   pricePerKwh: string;
   usableCapacity: number;
-  volts: number;
 }
 
 export const useChargingResults = ({
-  amps,
+  chargingPowerKw,
   consumption,
   currencySymbol,
   currentSoC,
   duration,
   pricePerKwh,
   usableCapacity,
-  volts,
 }: UseChargingResultsOptions) => {
-  const chargingPower = (volts * amps) / 1000;
+  const chargingPower = chargingPowerKw;
   const energyAddedKwh = useMemo(() => {
-    return calculateEnergyAdded(usableCapacity, currentSoC, volts, amps, duration);
-  }, [amps, currentSoC, duration, usableCapacity, volts]);
+    return calculateEnergyAdded(usableCapacity, currentSoC, chargingPowerKw, duration);
+  }, [chargingPowerKw, currentSoC, duration, usableCapacity]);
   const chargingSpeedPercent = (energyAddedKwh / usableCapacity) * 100 / duration;
   const socAfterCharging = Math.min(
     currentSoC + (energyAddedKwh / usableCapacity) * 100,
@@ -49,7 +44,7 @@ export const useChargingResults = ({
     return parseFixedTariffPricing(pricePerKwh);
   }, [pricePerKwh]);
   const displayCurrencySymbol = useMemo(() => {
-    return normalizeCurrencySymbol(currencySymbol.trim() || guessCurrencySymbol());
+    return normalizeCurrencySymbol(currencySymbol.trim());
   }, [currencySymbol]);
   const sessionWallEnergyKwh = useMemo(() => {
     return calculateSessionWallEnergy(energyAddedKwh);

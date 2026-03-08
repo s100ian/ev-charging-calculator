@@ -6,14 +6,13 @@ import {
 } from "../utils/calculations";
 
 interface UseChargePlanOptions {
-  amps: number;
+  chargingPowerKw: number;
   consumption: number;
   currentSoC: number;
   departureTime: string;
   pricePerKwh: string;
   targetSoC: number;
   usableCapacity: number;
-  volts: number;
 }
 
 const getAvailableDurationHours = (departureTime: string): number | null => {
@@ -100,14 +99,13 @@ const getPlanningSummary = (
 };
 
 export const useChargePlan = ({
-  amps,
+  chargingPowerKw,
   consumption,
   currentSoC,
   departureTime,
   pricePerKwh,
   targetSoC,
   usableCapacity,
-  volts,
 }: UseChargePlanOptions) => {
   const normalizedTargetSoC = Math.min(100, Math.max(currentSoC, targetSoC));
   const availableDurationHours = useMemo(() => {
@@ -115,20 +113,18 @@ export const useChargePlan = ({
   }, [departureTime]);
   const chargePlan = useMemo(() => {
     return calculateChargePlan({
-      amps,
+      chargingPowerKw,
       availableDurationHours,
       currentSoC,
       targetSoC: normalizedTargetSoC,
       usableCapacity,
-      volts,
     });
   }, [
-    amps,
+    chargingPowerKw,
     availableDurationHours,
     currentSoC,
     normalizedTargetSoC,
     usableCapacity,
-    volts,
   ]);
   const rangeAtTargetKm = useMemo(() => {
     return calculateRangeAtSoC(usableCapacity, consumption, chargePlan.targetSoC);

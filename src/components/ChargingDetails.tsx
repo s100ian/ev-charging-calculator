@@ -1,42 +1,49 @@
 import React from "react";
+import ChargingCost from "./ChargingCost";
+import SliderField from "./SliderField";
+import { SupportedCurrencySymbol } from "../utils/currency";
+
+const quickSetChargingPowerOptions = [2.3, 4.6, 7.4] as const;
 
 interface ChargingDetailsProps {
-  volts: number;
-  setVolts: (value: number) => void;
+  chargingPowerKw: number;
+  setChargingPowerKw: (value: number) => void;
   duration: number;
   setDuration: (value: number) => void;
-  amps: number;
-  setAmps: (value: number) => void;
+  pricePerKwh: string;
+  setPricePerKwh: (value: string) => void;
+  currencySymbol: SupportedCurrencySymbol;
+  setCurrencySymbol: (value: SupportedCurrencySymbol) => void;
 }
 
 const ChargingDetails: React.FC<ChargingDetailsProps> = ({
-  volts,
-  setVolts,
+  chargingPowerKw,
+  setChargingPowerKw,
   duration,
   setDuration,
-  amps,
-  setAmps,
+  pricePerKwh,
+  setPricePerKwh,
+  currencySymbol,
+  setCurrencySymbol,
 }) => {
-  const handleDecrement = (
-    setter: (value: number) => void,
-    value: number,
-    min: number,
-    step: number = 1
-  ) => {
-    setter(Math.max(min, value - step));
+  const clampChargingPowerKw = (value: number) => {
+    return Math.min(7.4, Math.max(0, value));
   };
 
-  const handleIncrement = (
-    setter: (value: number) => void,
-    value: number,
-    max: number,
-    step: number = 1
-  ) => {
-    setter(Math.min(max, value + step));
+  const handleChargingPowerChange = (value: number) => {
+    setChargingPowerKw(clampChargingPowerKw(parseFloat(value.toFixed(1))));
   };
 
-  const handleDurationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDuration(parseFloat(e.target.value));
+  const handleChargingPowerDecrement = () => {
+    setChargingPowerKw(clampChargingPowerKw(parseFloat((chargingPowerKw - 0.1).toFixed(1))));
+  };
+
+  const handleChargingPowerIncrement = () => {
+    setChargingPowerKw(clampChargingPowerKw(parseFloat((chargingPowerKw + 0.1).toFixed(1))));
+  };
+
+  const handleDurationChange = (value: number) => {
+    setDuration(value);
   };
 
   const handleDurationDecrement = () => {
@@ -50,86 +57,48 @@ const ChargingDetails: React.FC<ChargingDetailsProps> = ({
   return (
     <div className="input-section charging-details-container">
       <h2>Charging Details</h2>
-      <div className="slider-group" data-testid="volts-group">
-        <label className="slider-label">
-          Volts (V): <span className="slider-value">{volts}</span>
-        </label>
-        <div className="slider-controls">
-          <button
-            className="control-button"
-            onClick={() => handleDecrement(setVolts, volts, 110)}
-          >
-            -
-          </button>
-          <input
-            type="range"
-            min="110"
-            max="240"
-            value={volts}
-            onChange={(e) => setVolts(parseInt(e.target.value, 10))}
-            className="slider-input"
-            data-testid="volts-slider"
-          />
-          <button
-            className="control-button"
-            onClick={() => handleIncrement(setVolts, volts, 240)}
-          >
-            +
-          </button>
-        </div>
-      </div>
-      <div className="slider-group" data-testid="amps-group">
-        <label className="slider-label">
-          Amps (A): <span className="slider-value">{amps}</span>
-        </label>
-        <div className="slider-controls">
-          <button
-            className="control-button"
-            onClick={() => handleDecrement(setAmps, amps, 5)}
-          >
-            -
-          </button>
-          <input
-            type="range"
-            min="5"
-            max="32"
-            value={amps}
-            onChange={(e) => setAmps(parseInt(e.target.value, 10))}
-            className="slider-input"
-            data-testid="amps-slider"
-          />
-          <button
-            className="control-button"
-            onClick={() => handleIncrement(setAmps, amps, 32)}
-          >
-            +
-          </button>
-        </div>
-      </div>
-      <div className="slider-group" data-testid="duration-group">
-        <label className="slider-label">
-          Charging duration (hours):{" "}
-          <span className="slider-value">{duration.toFixed(1)}</span>
-        </label>
-        <div className="slider-controls">
-          <button className="control-button" onClick={handleDurationDecrement}>
-            -
-          </button>
-          <input
-            type="range"
-            min="1"
-            max="50"
-            step="0.1"
-            value={duration}
-            onChange={handleDurationChange}
-            className="slider-input"
-            data-testid="duration-slider"
-          />
-          <button className="control-button" onClick={handleDurationIncrement}>
-            +
-          </button>
-        </div>
-      </div>
+      <SliderField
+        groupTestId="charging-power-group"
+        label="Charging power (kW)"
+        value={chargingPowerKw}
+        displayValue={chargingPowerKw.toFixed(1)}
+        sliderId="charging-power-slider"
+        sliderTestId="charging-power-slider"
+        min={0}
+        max={7.4}
+        step={0.1}
+        onSliderChange={handleChargingPowerChange}
+        onDecrement={handleChargingPowerDecrement}
+        onIncrement={handleChargingPowerIncrement}
+        quickSetGroupTestId="charging-power-presets-group"
+        quickSetLabel="Quick power"
+        quickSetAriaLabel="Charging power quick set"
+        quickSetOptions={quickSetChargingPowerOptions.map((option) => ({
+          label: option.toFixed(1),
+          value: option,
+        }))}
+      />
+      <SliderField
+        groupTestId="duration-group"
+        label="Charging duration (hours)"
+        value={duration}
+        displayValue={duration.toFixed(1)}
+        sliderId="duration-slider"
+        sliderTestId="duration-slider"
+        min={1}
+        max={50}
+        step={0.1}
+        onSliderChange={handleDurationChange}
+        onDecrement={handleDurationDecrement}
+        onIncrement={handleDurationIncrement}
+      />
+      <ChargingCost
+        pricePerKwh={pricePerKwh}
+        setPricePerKwh={setPricePerKwh}
+        currencySymbol={currencySymbol}
+        setCurrencySymbol={setCurrencySymbol}
+        embedded
+      />
     </div>
   );
 };
