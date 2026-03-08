@@ -13,9 +13,9 @@ test.describe("EV Charging Calculator", () => {
     const resultValues = page.locator(".result-value");
     await expect(resultValues).toHaveCount(15);
     const planningResultValues = page.locator(
-      ".planning-results-section .result-value"
+      '[data-testid="planning-results"] .result-value'
     );
-    const costResultValues = page.locator(".cost-results-section .result-value");
+    const costResultValues = page.locator('[data-testid="cost-results"] .result-value');
 
     await expect(resultValues.nth(0)).toHaveText("76 %"); // SoC after charging
     await expect(resultValues.nth(1)).toHaveText("2.30 kW"); // Charging power
@@ -38,7 +38,7 @@ test.describe("EV Charging Calculator", () => {
     await page.locator("#price-per-kwh-input").fill("0.25");
     await page.getByRole("button", { name: "€" }).click();
 
-    const costResultValues = page.locator(".cost-results-section .result-value");
+    const costResultValues = page.locator('[data-testid="cost-results"] .result-value');
 
     await expect(costResultValues.nth(0)).toHaveText("€4.60");
     await expect(costResultValues.nth(1)).toHaveText("€5.40");
@@ -50,7 +50,7 @@ test.describe("EV Charging Calculator", () => {
     await page.locator("#price-per-kwh-input").fill("0.25");
     await page.getByRole("button", { name: "$" }).click();
 
-    const costResultValues = page.locator(".cost-results-section .result-value");
+    const costResultValues = page.locator('[data-testid="cost-results"] .result-value');
 
     await expect(page.getByRole("button", { name: "$" })).toHaveAttribute(
       "aria-pressed",
@@ -67,7 +67,7 @@ test.describe("EV Charging Calculator", () => {
     await page.getByRole("button", { name: "€" }).click();
     await page.locator('[data-testid="current-soc-slider"]').fill("80");
 
-    const costResultValues = page.locator(".cost-results-section .result-value");
+    const costResultValues = page.locator('[data-testid="cost-results"] .result-value');
 
     await expect(costResultValues.nth(2)).toHaveText("€3.60");
   });
@@ -78,7 +78,7 @@ test.describe("EV Charging Calculator", () => {
 
     await page.reload();
 
-    const costResultValues = page.locator(".cost-results-section .result-value");
+    const costResultValues = page.locator('[data-testid="cost-results"] .result-value');
 
     await expect(page.locator("#price-per-kwh-input")).toHaveValue("0.25");
     await expect(page.getByRole("button", { name: "£" })).toHaveAttribute(
@@ -92,7 +92,7 @@ test.describe("EV Charging Calculator", () => {
     await page.locator('[data-testid="target-soc-slider"]').fill("90");
 
     const planningResultValues = page.locator(
-      ".planning-results-section .result-value"
+      '[data-testid="planning-results"] .result-value'
     );
 
     await expect(planningResultValues.nth(0)).toHaveText("12h 31m");
@@ -106,7 +106,7 @@ test.describe("EV Charging Calculator", () => {
     await page.getByRole("button", { name: "€" }).click();
     await page.locator('[data-testid="target-soc-slider"]').fill("90");
 
-    const costResultValues = page.locator(".cost-results-section .result-value");
+    const costResultValues = page.locator('[data-testid="cost-results"] .result-value');
 
     await expect(costResultValues.nth(1)).toHaveText("€7.20");
   });
@@ -124,7 +124,7 @@ test.describe("EV Charging Calculator", () => {
     await page.locator("#departure-time-input").fill(departureTime);
 
     const planningResultValues = page.locator(
-      ".planning-results-section .result-value"
+      '[data-testid="planning-results"] .result-value'
     );
 
     await expect(planningResultValues.nth(5)).toHaveText("No");
