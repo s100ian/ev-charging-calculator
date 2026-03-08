@@ -1,5 +1,6 @@
 import React from "react";
 import Tile from "./Tile";
+import TileGroup from "./TileGroup";
 
 interface CostResultsProps {
   currencySymbol: string;
@@ -29,31 +30,32 @@ const CostResults: React.FC<CostResultsProps> = ({
   costPer100Km,
 }) => {
   return (
-    <div className="results-section cost-results-section">
-      <h2>Cost</h2>
-      <div className="results-grid cost-results-grid">
-        <Tile
-          label="Session cost"
-          value={formatCurrencyValue(sessionCost, currencySymbol)}
-          placeholder={sessionCost === null}
-        />
-        <Tile
-          label="Cost to target"
-          value={formatCurrencyValue(targetCost, currencySymbol)}
-          placeholder={targetCost === null}
-        />
-        <Tile
-          label="Cost to full"
-          value={formatCurrencyValue(fullChargeCost, currencySymbol)}
-          placeholder={fullChargeCost === null}
-        />
-        <Tile
-          label="Cost per 100 km"
-          value={formatCurrencyValue(costPer100Km, currencySymbol, " / 100 km")}
-          placeholder={costPer100Km === null}
-        />
-      </div>
-    </div>
+    <TileGroup
+      title="Cost"
+      sectionClassName="cost-results-section"
+      gridClassName="cost-results-grid"
+    >
+      <Tile
+        label="Session cost"
+        value={formatCurrencyValue(sessionCost, currencySymbol)}
+        placeholder={sessionCost === null}
+      />
+      <Tile
+        label="Cost to target"
+        value={formatCurrencyValue(targetCost, currencySymbol)}
+        placeholder={targetCost === null}
+      />
+      <Tile
+        label="Cost to full"
+        value={formatCurrencyValue(fullChargeCost, currencySymbol)}
+        placeholder={fullChargeCost === null}
+      />
+      <Tile
+        label="Cost per 100 km"
+        value={formatCurrencyValue(costPer100Km, currencySymbol, " / 100 km")}
+        placeholder={costPer100Km === null}
+      />
+    </TileGroup>
   );
 };
 

@@ -1,5 +1,6 @@
 import React from "react";
 import Tile from "./Tile";
+import TileGroup from "./TileGroup";
 
 interface PlanningResultsProps {
   batteryEnergyToTargetKwh: number;
@@ -70,57 +71,60 @@ const PlanningResults: React.FC<PlanningResultsProps> = ({
 }) => {
   const hasDepartureConstraint = departureTime.trim() !== "";
 
+  const summaryHeader = planningSummary !== null ? (
+    <p
+      className={`planning-summary ${
+        isReachableByDeparture ? "planning-summary--success" : "planning-summary--warning"
+      }`}
+    >
+      {planningSummary}
+    </p>
+  ) : undefined;
+
   return (
-    <div className="results-section planning-results-section">
-      <h2>Planning Results</h2>
-      {planningSummary !== null && (
-        <p
-          className={`planning-summary ${
-            isReachableByDeparture ? "planning-summary--success" : "planning-summary--warning"
-          }`}
-        >
-          {planningSummary}
-        </p>
+    <TileGroup
+      title="Planning Results"
+      sectionClassName="planning-results-section"
+      gridClassName="planning-results-grid"
+      header={summaryHeader}
+    >
+      <Tile
+        label="Time to target"
+        value={formatDuration(timeToTargetHours, isTargetReachable)}
+        placeholder={!isTargetReachable}
+      />
+      <Tile
+        label="Ready at"
+        value={readyAtLabel ?? "—"}
+        placeholder={readyAtLabel === null}
+      />
+      <Tile label="Battery energy" value={formatEnergy(batteryEnergyToTargetKwh)} />
+      <Tile label="Wall energy" value={formatEnergy(wallEnergyToTargetKwh)} />
+      <Tile
+        label="Range at target"
+        value={formatRange(rangeAtTargetKm)}
+        placeholder={rangeAtTargetKm === null}
+      />
+      {hasDepartureConstraint && (
+        <>
+          <Tile
+            label="Ready by departure"
+            value={isReachableByDeparture ? "Yes" : "No"}
+            valueClassName={`planning-status ${
+              isReachableByDeparture ? "planning-status--success" : "planning-status--warning"
+            }`}
+          />
+          <Tile
+            label="SoC at departure"
+            value={formatPercentage(socAtDeparturePercent)}
+          />
+          <Tile
+            label="Shortfall"
+            value={formatPercentage(socShortfallPercent)}
+          />
+        </>
       )}
-      <div className="results-grid planning-results-grid">
-        <Tile
-          label="Time to target"
-          value={formatDuration(timeToTargetHours, isTargetReachable)}
-          placeholder={!isTargetReachable}
-        />
-        <Tile
-          label="Ready at"
-          value={readyAtLabel ?? "—"}
-          placeholder={readyAtLabel === null}
-        />
-        <Tile label="Battery energy" value={formatEnergy(batteryEnergyToTargetKwh)} />
-        <Tile label="Wall energy" value={formatEnergy(wallEnergyToTargetKwh)} />
-        <Tile
-          label="Range at target"
-          value={formatRange(rangeAtTargetKm)}
-          placeholder={rangeAtTargetKm === null}
-        />
-        {hasDepartureConstraint && (
-          <>
-            <Tile
-              label="Ready by departure"
-              value={isReachableByDeparture ? "Yes" : "No"}
-              valueClassName={`planning-status ${
-                isReachableByDeparture ? "planning-status--success" : "planning-status--warning"
-              }`}
-            />
-            <Tile
-              label="SoC at departure"
-              value={formatPercentage(socAtDeparturePercent)}
-            />
-            <Tile
-              label="Shortfall"
-              value={formatPercentage(socShortfallPercent)}
-            />
-          </>
-        )}
-      </div>
-    </div>
+    </TileGroup>
   );
 };
 

@@ -1,5 +1,6 @@
 import React from "react";
 import Tile from "./Tile";
+import TileGroup from "./TileGroup";
 
 interface ResultsDisplayProps {
   socAfterCharging: number;
@@ -19,27 +20,24 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
   totalRange,
 }) => {
   return (
-    <div className="results-section">
-      <h2>Results</h2>
-      <div className="results-grid">
-        <Tile label="SoC after charging" value={`${socAfterCharging.toFixed(0)} %`}>
-          <div className="battery-container">
-            <div
-              className="battery-level"
-              style={{
-                width: `${socAfterCharging}%`,
-                backgroundColor: getBatteryColor(socAfterCharging),
-              }}
-            />
-          </div>
-        </Tile>
-        <Tile label="Charging power" value={`${chargingPower.toFixed(2)} kW`} />
-        <Tile label="Charging speed" value={`${chargingSpeedPercent.toFixed(1)} %/h`} />
-        <Tile label="Charging speed" value={`${chargingSpeedKm.toFixed(1)} km/h`} />
-        <Tile label="Range per session" value={`${rangePerSession.toFixed(0)} km`} />
-        <Tile label="Total range" value={`${totalRange.toFixed(0)} km`} />
-      </div>
-    </div>
+    <TileGroup title="Results">
+      <Tile label="SoC after charging" value={`${socAfterCharging.toFixed(0)} %`}>
+        <div className="battery-container">
+          <div
+            className="battery-level"
+            style={{
+              width: `${socAfterCharging}%`,
+              backgroundColor: getBatteryColor(socAfterCharging),
+            }}
+          />
+        </div>
+      </Tile>
+      <Tile label="Charging power" value={`${chargingPower.toFixed(2)} kW`} />
+      <Tile label="Charging speed" value={`${chargingSpeedPercent.toFixed(1)} %/h`} />
+      <Tile label="Charging speed" value={`${chargingSpeedKm.toFixed(1)} km/h`} />
+      <Tile label="Range per session" value={`${rangePerSession.toFixed(0)} km`} />
+      <Tile label="Total range" value={`${totalRange.toFixed(0)} km`} />
+    </TileGroup>
   );
 };
 
