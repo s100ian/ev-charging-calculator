@@ -8,12 +8,14 @@ describe("CostResults", () => {
       <CostResults
         currencySymbol="€"
         sessionCost={4.5}
+        targetCost={7.2}
         fullChargeCost={12}
         costPer100Km={5.25}
       />
     );
 
     expect(screen.getByText("€4.50")).toBeInTheDocument();
+    expect(screen.getByText("€7.20")).toBeInTheDocument();
     expect(screen.getByText("€12.00")).toBeInTheDocument();
     expect(screen.getByText("€5.25 / 100 km")).toBeInTheDocument();
   });
@@ -23,12 +25,13 @@ describe("CostResults", () => {
       <CostResults
         currencySymbol="€"
         sessionCost={null}
+        targetCost={null}
         fullChargeCost={null}
         costPer100Km={null}
       />
     );
 
-    expect(screen.getAllByText("—")).toHaveLength(3);
+    expect(screen.getAllByText("—")).toHaveLength(4);
   });
 
   it("renders multi-character currency symbols", () => {
@@ -36,6 +39,7 @@ describe("CostResults", () => {
       <CostResults
         currencySymbol="лв"
         sessionCost={4.5}
+        targetCost={7.2}
         fullChargeCost={12}
         costPer100Km={5.25}
       />

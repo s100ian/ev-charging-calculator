@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import packageJson from "../package.json"; // Import package.json
+import ChargePlanning from "./components/ChargePlanning";
 import ChargingCost from "./components/ChargingCost";
 import CostResults from "./components/CostResults";
 import "./App.css";
 import CarInfo from "./components/CarInfo";
 import ChargingDetails from "./components/ChargingDetails";
+import PlanningResults from "./components/PlanningResults";
 import { ThemeProvider } from "./context/ThemeContext";
 import ThemeToggle from "./components/ThemeToggle";
+import { useChargePlan } from "./hooks/useChargePlan";
 import { useChargingResults } from "./hooks/useChargingResults";
 import PwaBanner from "./components/PwaBanner";
 import ResultsDisplay from "./components/ResultsDisplay";
@@ -35,12 +38,29 @@ function AppContent() {
     getInitialState("duration", 8)
   ); // hours
   const [amps, setAmps] = useState(() => getInitialState("amps", 10)); // A
+  const [targetSoC, setTargetSoC] = useState(() =>
+    Math.min(100, Math.max(0, getInitialState("targetSoC", 80)))
+  );
+  const [departureTime, setDepartureTime] = useState(() =>
+    getInitialTextState("departureTime", "")
+  );
   const [pricePerKwh, setPricePerKwh] = useState(() =>
     getInitialTextState("pricePerKwh", "")
   );
   const [currencySymbol, setCurrencySymbol] = useState(() =>
     getInitialCurrencySymbol()
   );
+  const { chargePlan, planningSummary, readyAtLabel, targetCost, rangeAtTargetKm } =
+    useChargePlan({
+      amps,
+      consumption,
+      currentSoC,
+      departureTime,
+      pricePerKwh,
+      targetSoC,
+      usableCapacity,
+      volts,
+    });
 
   const {
     chargingPower,
@@ -71,8 +91,10 @@ function AppContent() {
       consumption,
       currencySymbol,
       currentSoC,
+      departureTime,
       duration,
       pricePerKwh,
+      targetSoC,
       usableCapacity,
       volts,
     });
@@ -85,6 +107,8 @@ function AppContent() {
     amps,
     pricePerKwh,
     currencySymbol,
+    targetSoC,
+    departureTime,
   ]);
 
   return (
@@ -113,6 +137,13 @@ function AppContent() {
         amps={amps}
         setAmps={setAmps}
       />
+      <ChargePlanning
+        currentSoC={currentSoC}
+        targetSoC={chargePlan.targetSoC}
+        setTargetSoC={setTargetSoC}
+        departureTime={departureTime}
+        setDepartureTime={setDepartureTime}
+      />
       <ChargingCost
         pricePerKwh={pricePerKwh}
         setPricePerKwh={setPricePerKwh}
@@ -127,9 +158,23 @@ function AppContent() {
         rangePerSession={rangePerSession}
         totalRange={totalRange} // Pass totalRange prop
       />
+      <PlanningResults
+        batteryEnergyToTargetKwh={chargePlan.batteryEnergyToTargetKwh}
+        wallEnergyToTargetKwh={chargePlan.wallEnergyToTargetKwh}
+        timeToTargetHours={chargePlan.timeToTargetHours}
+        readyAtLabel={readyAtLabel}
+        rangeAtTargetKm={rangeAtTargetKm}
+        planningSummary={planningSummary}
+        isTargetReachable={chargePlan.isTargetReachable}
+        departureTime={departureTime}
+        isReachableByDeparture={chargePlan.isReachableByDeparture}
+        socAtDeparturePercent={chargePlan.socAtDeparturePercent}
+        socShortfallPercent={chargePlan.socShortfallPercent}
+      />
       <CostResults
         currencySymbol={displayCurrencySymbol}
         sessionCost={sessionCost}
+        targetCost={targetCost}
         fullChargeCost={fullChargeCost}
         costPer100Km={costPer100Km}
       />

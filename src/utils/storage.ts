@@ -20,8 +20,10 @@ interface PersistCalculatorStateOptions {
   consumption: number;
   currencySymbol: string;
   currentSoC: number;
+  departureTime: string;
   duration: number;
   pricePerKwh: string;
+  targetSoC: number;
   usableCapacity: number;
   volts: number;
 }
@@ -31,8 +33,10 @@ export const persistCalculatorState = ({
   consumption,
   currencySymbol,
   currentSoC,
+  departureTime,
   duration,
   pricePerKwh,
+  targetSoC,
   usableCapacity,
   volts,
 }: PersistCalculatorStateOptions): void => {
@@ -43,11 +47,18 @@ export const persistCalculatorState = ({
     localStorage.setItem("duration", duration.toString());
     localStorage.setItem("currentSoC", currentSoC.toString());
     localStorage.setItem("amps", amps.toString());
+    localStorage.setItem("targetSoC", targetSoC.toString());
 
     if (pricePerKwh.trim() === "") {
       localStorage.removeItem("pricePerKwh");
     } else {
       localStorage.setItem("pricePerKwh", pricePerKwh);
+    }
+
+    if (departureTime.trim() === "") {
+      localStorage.removeItem("departureTime");
+    } else {
+      localStorage.setItem("departureTime", departureTime);
     }
 
     if (currencySymbol.trim() === "") {

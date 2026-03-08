@@ -195,6 +195,12 @@
   transform: translateY(-1px);
 }
 
+.currency-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
 .currency-button:focus-visible {
   outline: 2px solid var(--accent-color);
   outline-offset: 2px;
@@ -203,6 +209,14 @@
 .currency-button--active {
   background: var(--accent-color);
   color: white;
+}
+
+.planner-helper-text {
+  margin: 0;
+  color: var(--label-color);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  text-align: left;
 }
 
 .slider-label {
@@ -360,13 +374,64 @@
   color: var(--result-label);
 }
 
+.planning-summary {
+  margin: 0 0 1rem;
+  padding: 0.95rem 1rem;
+  border-radius: 14px;
+  text-align: left;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  background: var(--result-tile-bg);
+}
+
+.planning-summary--success {
+  color: var(--accent-color);
+}
+
+.planning-summary--warning {
+  color: #fb923c;
+}
+
+.planning-status--success {
+  color: var(--accent-color);
+}
+
+.planning-status--warning {
+  color: #f97316;
+}
+
+.planning-results-grid {
+  grid-template-columns: 1fr;
+}
+
 .cost-results-grid {
   grid-template-columns: 1fr;
 }
 
-@media (min-width: 700px) {
+@media (min-width: 520px) {
+  .planning-results-grid,
   .cost-results-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 700px) {
+  .planning-results-grid {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  .cost-results-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1100px) {
+  .planning-results-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .cost-results-grid {
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
