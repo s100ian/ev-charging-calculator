@@ -714,19 +714,9 @@
   color: #f97316;
 }
 
-.planning-results-grid {
-  grid-template-columns: 1fr;
-}
-
+.planning-results-grid,
 .cost-results-grid {
-  grid-template-columns: 1fr;
-}
-
-@media (min-width: 520px) {
-  .planning-results-grid,
-  .cost-results-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  grid-template-columns: repeat(2, 1fr);
 }
 
 @media (min-width: 700px) {
