@@ -361,4 +361,82 @@ body {
   right: 10px;
   font-size: 0.75rem;
   color: var(--result-label);
-}
+ }
+
+ .pwa-banner {
+  position: fixed;
+  left: 50%;
+  bottom: 1rem;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: min(720px, calc(100% - 2rem));
+  padding: 1rem 1.25rem;
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--section-bg) 92%, black 8%);
+  box-shadow: var(--shadow-card);
+  z-index: 20;
+ }
+
+ .pwa-banner__content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  text-align: left;
+ }
+
+ .pwa-banner__title {
+  color: var(--text-color);
+  font-size: 0.95rem;
+ }
+
+ .pwa-banner__message {
+  color: var(--label-color);
+  font-size: 0.9rem;
+ }
+
+ .pwa-banner__actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-shrink: 0;
+ }
+
+ .pwa-banner__button {
+  min-width: 88px;
+  padding: 0.7rem 1rem;
+  border: none;
+  border-radius: 999px;
+  background: var(--button-bg);
+  color: var(--text-color);
+ }
+
+ .pwa-banner__button:hover {
+  background: var(--button-hover);
+ }
+
+ .pwa-banner__button--primary {
+  background: var(--accent-color);
+  color: #ffffff;
+ }
+
+ .pwa-banner__button--primary:hover {
+  background: color-mix(in srgb, var(--accent-color) 88%, black 12%);
+ }
+
+ @media (max-width: 640px) {
+  .pwa-banner {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pwa-banner__actions {
+    width: 100%;
+  }
+
+  .pwa-banner__button {
+    flex: 1;
+  }
+ }

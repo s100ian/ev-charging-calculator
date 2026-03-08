@@ -4,6 +4,7 @@ import { calculateEnergyAdded } from "./utils/calculations";
 import "./App.css";
 import CarInfo from "./components/CarInfo";
 import ChargingDetails from "./components/ChargingDetails";
+import PwaBanner from "./components/PwaBanner";
 import ResultsDisplay from "./components/ResultsDisplay";
 import { ThemeProvider } from "./context/ThemeContext";
 import ThemeToggle from "./components/ThemeToggle";
@@ -96,6 +97,7 @@ function AppContent() {
         rangePerSession={rangePerSession}
         totalRange={totalRange} // Pass totalRange prop
       />
+      <PwaBanner />
       <div className="app-version">v{packageJson.version}</div>{" "}
       {/* Add version display */}
     </div>
