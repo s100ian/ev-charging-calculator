@@ -3,6 +3,7 @@ import React from "react";
 interface CostResultsProps {
   currencySymbol: string;
   sessionCost: number | null;
+  targetCost: number | null;
   fullChargeCost: number | null;
   costPer100Km: number | null;
 }
@@ -22,6 +23,7 @@ const formatCurrencyValue = (
 const CostResults: React.FC<CostResultsProps> = ({
   currencySymbol,
   sessionCost,
+  targetCost,
   fullChargeCost,
   costPer100Km,
 }) => {
@@ -35,6 +37,14 @@ const CostResults: React.FC<CostResultsProps> = ({
             className={`result-value${sessionCost === null ? " result-value--placeholder" : ""}`}
           >
             {formatCurrencyValue(sessionCost, currencySymbol)}
+          </strong>
+        </div>
+        <div className="result-tile">
+          <span>Cost to target</span>
+          <strong
+            className={`result-value${targetCost === null ? " result-value--placeholder" : ""}`}
+          >
+            {formatCurrencyValue(targetCost, currencySymbol)}
           </strong>
         </div>
         <div className="result-tile">

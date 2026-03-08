@@ -5,7 +5,7 @@ import {
   calculateEnergyCost,
   calculateFullChargeWallEnergy,
   calculateSessionWallEnergy,
-  FixedTariffPricing,
+  parseFixedTariffPricing,
 } from "../utils/calculations";
 import {
   guessCurrencySymbol,
@@ -45,23 +45,8 @@ export const useChargingResults = ({
   const chargingSpeedKm = (chargingPower / consumption) * 100;
   const rangePerSession = (energyAddedKwh / consumption) * 100;
   const totalRange = (usableCapacity / consumption) * 100;
-  const fixedTariffPricing = useMemo<FixedTariffPricing | null>(() => {
-    const normalizedPrice = pricePerKwh.trim();
-
-    if (normalizedPrice === "") {
-      return null;
-    }
-
-    const parsedPrice = parseFloat(normalizedPrice);
-
-    if (!Number.isFinite(parsedPrice) || parsedPrice < 0) {
-      return null;
-    }
-
-    return {
-      type: "fixed",
-      pricePerKwh: parsedPrice,
-    };
+  const fixedTariffPricing = useMemo(() => {
+    return parseFixedTariffPricing(pricePerKwh);
   }, [pricePerKwh]);
   const displayCurrencySymbol = useMemo(() => {
     return normalizeCurrencySymbol(currencySymbol.trim() || guessCurrencySymbol());

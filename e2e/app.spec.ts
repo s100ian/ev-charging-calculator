@@ -11,7 +11,11 @@ test.describe("EV Charging Calculator", () => {
     await expect(page.locator("h1")).toHaveText("⚡EV Charging Calculator");
 
     const resultValues = page.locator(".result-value");
-    await expect(resultValues).toHaveCount(9);
+    await expect(resultValues).toHaveCount(15);
+    const planningResultValues = page.locator(
+      ".planning-results-section .result-value"
+    );
+    const costResultValues = page.locator(".cost-results-section .result-value");
 
     await expect(resultValues.nth(0)).toHaveText("76 %"); // SoC after charging
     await expect(resultValues.nth(1)).toHaveText("2.30 kW"); // Charging power
@@ -19,9 +23,15 @@ test.describe("EV Charging Calculator", () => {
     await expect(resultValues.nth(3)).toHaveText("12.8 km/h"); // Charging speed km
     await expect(resultValues.nth(4)).toHaveText("102 km"); // Range per session
     await expect(resultValues.nth(5)).toHaveText("400 km"); // Total range
-    await expect(resultValues.nth(6)).toHaveText("—");
-    await expect(resultValues.nth(7)).toHaveText("—");
-    await expect(resultValues.nth(8)).toHaveText("—");
+    await expect(planningResultValues.nth(0)).toHaveText("9h 23m");
+    await expect(planningResultValues.nth(2)).toHaveText("21.6 kWh");
+    await expect(planningResultValues.nth(3)).toHaveText("21.6 kWh");
+    await expect(planningResultValues.nth(4)).toHaveText("320 km");
+    await expect(planningResultValues.nth(1)).toHaveText(/\d{2}:\d{2}/);
+    await expect(costResultValues.nth(0)).toHaveText("—");
+    await expect(costResultValues.nth(1)).toHaveText("—");
+    await expect(costResultValues.nth(2)).toHaveText("—");
+    await expect(costResultValues.nth(3)).toHaveText("—");
   });
 
   test("entering a tariff shows charging cost results", async ({ page }) => {
@@ -31,8 +41,9 @@ test.describe("EV Charging Calculator", () => {
     const costResultValues = page.locator(".cost-results-section .result-value");
 
     await expect(costResultValues.nth(0)).toHaveText("€4.60");
-    await expect(costResultValues.nth(1)).toHaveText("€9.00");
-    await expect(costResultValues.nth(2)).toHaveText("€4.50 / 100 km");
+    await expect(costResultValues.nth(1)).toHaveText("€5.40");
+    await expect(costResultValues.nth(2)).toHaveText("€9.00");
+    await expect(costResultValues.nth(3)).toHaveText("€4.50 / 100 km");
   });
 
   test("currency buttons update displayed charging costs", async ({ page }) => {
@@ -46,8 +57,9 @@ test.describe("EV Charging Calculator", () => {
       "true"
     );
     await expect(costResultValues.nth(0)).toHaveText("$4.60");
-    await expect(costResultValues.nth(1)).toHaveText("$9.00");
-    await expect(costResultValues.nth(2)).toHaveText("$4.50 / 100 km");
+    await expect(costResultValues.nth(1)).toHaveText("$5.40");
+    await expect(costResultValues.nth(2)).toHaveText("$9.00");
+    await expect(costResultValues.nth(3)).toHaveText("$4.50 / 100 km");
   });
 
   test("cost to full updates from the current SoC", async ({ page }) => {
@@ -57,7 +69,7 @@ test.describe("EV Charging Calculator", () => {
 
     const costResultValues = page.locator(".cost-results-section .result-value");
 
-    await expect(costResultValues.nth(1)).toHaveText("€3.60");
+    await expect(costResultValues.nth(2)).toHaveText("€3.60");
   });
 
   test("charging cost settings persist after reload", async ({ page }) => {
@@ -74,6 +86,74 @@ test.describe("EV Charging Calculator", () => {
       "true"
     );
     await expect(costResultValues.nth(0)).toHaveText("£4.60");
+  });
+
+  test("planner inputs update planning results", async ({ page }) => {
+    await page.locator('[data-testid="target-soc-slider"]').fill("90");
+
+    const planningResultValues = page.locator(
+      ".planning-results-section .result-value"
+    );
+
+    await expect(planningResultValues.nth(0)).toHaveText("12h 31m");
+    await expect(planningResultValues.nth(2)).toHaveText("28.8 kWh");
+    await expect(planningResultValues.nth(3)).toHaveText("28.8 kWh");
+    await expect(planningResultValues.nth(4)).toHaveText("360 km");
+  });
+
+  test("planner cost to target updates from target SoC", async ({ page }) => {
+    await page.locator("#price-per-kwh-input").fill("0.25");
+    await page.getByRole("button", { name: "€" }).click();
+    await page.locator('[data-testid="target-soc-slider"]').fill("90");
+
+    const costResultValues = page.locator(".cost-results-section .result-value");
+
+    await expect(costResultValues.nth(1)).toHaveText("€7.20");
+  });
+
+  test("departure time shows readiness and planner settings persist after reload", async ({ page }) => {
+    const departureTime = await page.evaluate(() => {
+      const future = new Date(Date.now() + 60 * 60 * 1000);
+      const hours = String(future.getHours()).padStart(2, "0");
+      const minutes = String(future.getMinutes()).padStart(2, "0");
+
+      return `${hours}:${minutes}`;
+    });
+
+    await page.locator('[data-testid="target-soc-slider"]').fill("90");
+    await page.locator("#departure-time-input").fill(departureTime);
+
+    const planningResultValues = page.locator(
+      ".planning-results-section .result-value"
+    );
+
+    await expect(planningResultValues.nth(5)).toHaveText("No");
+    await expect(planningResultValues.nth(6)).toHaveText(/\d+ %/);
+    await expect(planningResultValues.nth(7)).toHaveText(/\d+ %/);
+
+    await page.reload();
+
+    await expect(page.locator('[data-testid="target-soc-slider"]')).toHaveValue(
+      "90"
+    );
+    await expect(page.locator("#departure-time-input")).toHaveValue(departureTime);
+    await expect(planningResultValues.nth(5)).toHaveText("No");
+  });
+
+  test("raw planner target persists when current SoC rises above it", async ({ page }) => {
+    const currentSoCSlider = page.locator('[data-testid="current-soc-slider"]');
+    const targetSoCSlider = page.locator('[data-testid="target-soc-slider"]');
+
+    await currentSoCSlider.fill("85");
+    await expect(targetSoCSlider).toHaveValue("85");
+
+    await page.reload();
+
+    await expect(targetSoCSlider).toHaveValue("85");
+
+    await currentSoCSlider.fill("50");
+
+    await expect(targetSoCSlider).toHaveValue("80");
   });
 
   test("slider interaction updates results", async ({ page }) => {
