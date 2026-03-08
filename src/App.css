@@ -136,6 +136,75 @@
   text-align: left;
 }
 
+.field-group {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.field-group:last-child {
+  margin-bottom: 0;
+}
+
+.field-label {
+  display: block;
+  margin-bottom: 0.8rem;
+  font-size: 1em;
+  color: var(--label-color);
+  font-weight: 500;
+}
+
+.text-input {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border: none;
+  border-radius: 14px;
+  background: var(--input-bg);
+  color: var(--text-color);
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.text-input::placeholder {
+  color: var(--result-label);
+}
+
+.text-input:focus {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+.currency-button-group {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+.currency-button {
+  padding: 0.9rem 1rem;
+  border: none;
+  border-radius: 14px;
+  background: var(--input-bg);
+  color: var(--text-color);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease;
+}
+
+.currency-button:hover {
+  transform: translateY(-1px);
+}
+
+.currency-button:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+.currency-button--active {
+  background: var(--accent-color);
+  color: white;
+}
+
 .slider-label {
   display: flex;
   justify-content: space-between;
@@ -285,6 +354,20 @@
 .result-value {
   font-size: 1.6rem;
   font-weight: 700;
+}
+
+.result-value--placeholder {
+  color: var(--result-label);
+}
+
+.cost-results-grid {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 700px) {
+  .cost-results-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .theme-toggle {

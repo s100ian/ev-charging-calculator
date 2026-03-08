@@ -7,6 +7,7 @@ This directory contains standalone feature proposals for the EV Charging Calcula
 ### High ROI
 
 - [Charging Cost Calculator](./charging-cost-calculator.md)
+  - [Charging Cost Calculator V2](./charging-cost-calculator-v2.md)
 - [Target SoC and Time to Target](./target-soc-and-time-to-target.md)
 - [Saved Car Profiles](./saved-car-profiles.md)
 - [Home Charging Scenarios](./home-charging-scenarios.md)

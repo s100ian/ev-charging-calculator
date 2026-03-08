@@ -11,7 +11,7 @@ test.describe("EV Charging Calculator", () => {
     await expect(page.locator("h1")).toHaveText("⚡EV Charging Calculator");
 
     const resultValues = page.locator(".result-value");
-    await expect(resultValues).toHaveCount(6);
+    await expect(resultValues).toHaveCount(9);
 
     await expect(resultValues.nth(0)).toHaveText("76 %"); // SoC after charging
     await expect(resultValues.nth(1)).toHaveText("2.30 kW"); // Charging power
@@ -19,6 +19,61 @@ test.describe("EV Charging Calculator", () => {
     await expect(resultValues.nth(3)).toHaveText("12.8 km/h"); // Charging speed km
     await expect(resultValues.nth(4)).toHaveText("102 km"); // Range per session
     await expect(resultValues.nth(5)).toHaveText("400 km"); // Total range
+    await expect(resultValues.nth(6)).toHaveText("—");
+    await expect(resultValues.nth(7)).toHaveText("—");
+    await expect(resultValues.nth(8)).toHaveText("—");
+  });
+
+  test("entering a tariff shows charging cost results", async ({ page }) => {
+    await page.locator("#price-per-kwh-input").fill("0.25");
+    await page.getByRole("button", { name: "€" }).click();
+
+    const costResultValues = page.locator(".cost-results-section .result-value");
+
+    await expect(costResultValues.nth(0)).toHaveText("€4.60");
+    await expect(costResultValues.nth(1)).toHaveText("€9.00");
+    await expect(costResultValues.nth(2)).toHaveText("€4.50 / 100 km");
+  });
+
+  test("currency buttons update displayed charging costs", async ({ page }) => {
+    await page.locator("#price-per-kwh-input").fill("0.25");
+    await page.getByRole("button", { name: "$" }).click();
+
+    const costResultValues = page.locator(".cost-results-section .result-value");
+
+    await expect(page.getByRole("button", { name: "$" })).toHaveAttribute(
+      "aria-pressed",
+      "true"
+    );
+    await expect(costResultValues.nth(0)).toHaveText("$4.60");
+    await expect(costResultValues.nth(1)).toHaveText("$9.00");
+    await expect(costResultValues.nth(2)).toHaveText("$4.50 / 100 km");
+  });
+
+  test("cost to full updates from the current SoC", async ({ page }) => {
+    await page.locator("#price-per-kwh-input").fill("0.25");
+    await page.getByRole("button", { name: "€" }).click();
+    await page.locator('[data-testid="current-soc-slider"]').fill("80");
+
+    const costResultValues = page.locator(".cost-results-section .result-value");
+
+    await expect(costResultValues.nth(1)).toHaveText("€3.60");
+  });
+
+  test("charging cost settings persist after reload", async ({ page }) => {
+    await page.locator("#price-per-kwh-input").fill("0.25");
+    await page.getByRole("button", { name: "£" }).click();
+
+    await page.reload();
+
+    const costResultValues = page.locator(".cost-results-section .result-value");
+
+    await expect(page.locator("#price-per-kwh-input")).toHaveValue("0.25");
+    await expect(page.getByRole("button", { name: "£" })).toHaveAttribute(
+      "aria-pressed",
+      "true"
+    );
+    await expect(costResultValues.nth(0)).toHaveText("£4.60");
   });
 
   test("slider interaction updates results", async ({ page }) => {

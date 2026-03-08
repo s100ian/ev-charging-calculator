@@ -38,3 +38,67 @@ export function calculateEnergyAdded(
         return Math.min(totalEnergy, energyTo100);
     }
 }
+
+export interface FixedTariffPricing {
+    type: "fixed";
+    pricePerKwh: number;
+}
+
+export function calculateEnergyToFull(
+    usableCapacity: number,
+    currentSoC: number
+): number {
+    return Math.max(0, ((100 - currentSoC) * usableCapacity) / 100);
+}
+
+export function calculateWallEnergyFromBatteryEnergy(
+    batteryEnergyKwh: number,
+    chargingEfficiency: number = 1
+): number {
+    const safeBatteryEnergy = Math.max(0, batteryEnergyKwh);
+
+    if (chargingEfficiency <= 0) {
+        return 0;
+    }
+
+    return safeBatteryEnergy / chargingEfficiency;
+}
+
+export function calculateSessionWallEnergy(
+    batteryEnergyAddedKwh: number,
+    chargingEfficiency: number = 1
+): number {
+    return calculateWallEnergyFromBatteryEnergy(
+        batteryEnergyAddedKwh,
+        chargingEfficiency
+    );
+}
+
+export function calculateFullChargeWallEnergy(
+    usableCapacity: number,
+    currentSoC: number,
+    chargingEfficiency: number = 1
+): number {
+    return calculateWallEnergyFromBatteryEnergy(
+        calculateEnergyToFull(usableCapacity, currentSoC),
+        chargingEfficiency
+    );
+}
+
+export function calculateEnergyCost(
+    energyKwh: number,
+    pricing: FixedTariffPricing
+): number {
+    return Math.max(0, energyKwh) * pricing.pricePerKwh;
+}
+
+export function calculateCostPer100Km(
+    consumption: number,
+    pricing: FixedTariffPricing,
+    chargingEfficiency: number = 1
+): number {
+    return calculateEnergyCost(
+        calculateWallEnergyFromBatteryEnergy(consumption, chargingEfficiency),
+        pricing
+    );
+}

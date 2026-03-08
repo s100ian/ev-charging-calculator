@@ -1,23 +1,21 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import packageJson from "../package.json"; // Import package.json
-import { calculateEnergyAdded } from "./utils/calculations";
+import ChargingCost from "./components/ChargingCost";
+import CostResults from "./components/CostResults";
 import "./App.css";
 import CarInfo from "./components/CarInfo";
 import ChargingDetails from "./components/ChargingDetails";
-import PwaBanner from "./components/PwaBanner";
-import ResultsDisplay from "./components/ResultsDisplay";
 import { ThemeProvider } from "./context/ThemeContext";
 import ThemeToggle from "./components/ThemeToggle";
-
-// Helper function to get initial state from localStorage or return default
-const getInitialState = (key: string, defaultValue: number): number => {
-  try {
-    const storedValue = localStorage.getItem(key);
-    return storedValue ? parseFloat(storedValue) : defaultValue;
-  } catch {
-    return defaultValue;
-  }
-};
+import { useChargingResults } from "./hooks/useChargingResults";
+import PwaBanner from "./components/PwaBanner";
+import ResultsDisplay from "./components/ResultsDisplay";
+import { getInitialCurrencySymbol } from "./utils/currency";
+import {
+  getInitialState,
+  getInitialTextState,
+  persistCalculatorState,
+} from "./utils/storage";
 
 function AppContent() {
   // Car Info State - Initialize from localStorage or use defaults
@@ -37,31 +35,57 @@ function AppContent() {
     getInitialState("duration", 8)
   ); // hours
   const [amps, setAmps] = useState(() => getInitialState("amps", 10)); // A
+  const [pricePerKwh, setPricePerKwh] = useState(() =>
+    getInitialTextState("pricePerKwh", "")
+  );
+  const [currencySymbol, setCurrencySymbol] = useState(() =>
+    getInitialCurrencySymbol()
+  );
 
-  // Derived values (no state updates in effects)
-  const chargingPower = (volts * amps) / 1000;
-  const energyAddedKwh = useMemo(() => {
-    return calculateEnergyAdded(usableCapacity, currentSoC, volts, amps, duration);
-  }, [volts, amps, duration, usableCapacity, currentSoC]);
-  const chargingSpeedPercent = (energyAddedKwh / usableCapacity) * 100 / duration;
-  const socAfterCharging = Math.min(currentSoC + (energyAddedKwh / usableCapacity) * 100, 100);
-  const chargingSpeedKm = (chargingPower / consumption) * 100;
-  const rangePerSession = (energyAddedKwh / consumption) * 100;
-  const totalRange = (usableCapacity / consumption) * 100;
+  const {
+    chargingPower,
+    chargingSpeedKm,
+    chargingSpeedPercent,
+    costPer100Km,
+    displayCurrencySymbol,
+    fullChargeCost,
+    rangePerSession,
+    sessionCost,
+    socAfterCharging,
+    totalRange,
+  } = useChargingResults({
+    amps,
+    consumption,
+    currencySymbol,
+    currentSoC,
+    duration,
+    pricePerKwh,
+    usableCapacity,
+    volts,
+  });
 
   // Persist inputs to localStorage
   useEffect(() => {
-    try {
-      localStorage.setItem("usableCapacity", usableCapacity.toString());
-      localStorage.setItem("consumption", consumption.toString());
-      localStorage.setItem("volts", volts.toString());
-      localStorage.setItem("duration", duration.toString());
-      localStorage.setItem("currentSoC", currentSoC.toString());
-      localStorage.setItem("amps", amps.toString());
-    } catch {
-      // localStorage unavailable (incognito, quota exceeded, disabled)
-    }
-  }, [usableCapacity, consumption, volts, duration, currentSoC, amps]);
+    persistCalculatorState({
+      amps,
+      consumption,
+      currencySymbol,
+      currentSoC,
+      duration,
+      pricePerKwh,
+      usableCapacity,
+      volts,
+    });
+  }, [
+    usableCapacity,
+    consumption,
+    volts,
+    duration,
+    currentSoC,
+    amps,
+    pricePerKwh,
+    currencySymbol,
+  ]);
 
   return (
     <div className="calculator-container">
@@ -89,6 +113,12 @@ function AppContent() {
         amps={amps}
         setAmps={setAmps}
       />
+      <ChargingCost
+        pricePerKwh={pricePerKwh}
+        setPricePerKwh={setPricePerKwh}
+        currencySymbol={currencySymbol}
+        setCurrencySymbol={setCurrencySymbol}
+      />
       <ResultsDisplay
         socAfterCharging={socAfterCharging}
         chargingPower={chargingPower}
@@ -96,6 +126,12 @@ function AppContent() {
         chargingSpeedKm={chargingSpeedKm}
         rangePerSession={rangePerSession}
         totalRange={totalRange} // Pass totalRange prop
+      />
+      <CostResults
+        currencySymbol={displayCurrencySymbol}
+        sessionCost={sessionCost}
+        fullChargeCost={fullChargeCost}
+        costPer100Km={costPer100Km}
       />
       <PwaBanner />
       <div className="app-version">v{packageJson.version}</div>{" "}
