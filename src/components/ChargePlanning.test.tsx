@@ -16,7 +16,7 @@ describe("ChargePlanning", () => {
 
     expect(screen.getByTestId("target-soc-slider")).toHaveValue("80");
     expect(screen.getByDisplayValue("18:30")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "80%" })).toHaveAttribute(
+    expect(screen.getByRole("button", { name: "80" })).toHaveAttribute(
       "aria-pressed",
       "true"
     );
@@ -55,7 +55,7 @@ describe("ChargePlanning", () => {
       />
     );
 
-    const eightyPercentButton = screen.getByRole("button", { name: "80%" });
+    const eightyPercentButton = screen.getByRole("button", { name: "80" });
 
     expect(eightyPercentButton).toBeDisabled();
 
