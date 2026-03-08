@@ -30,7 +30,7 @@ const CostResults: React.FC<CostResultsProps> = ({
   costPer100Km,
 }) => {
   return (
-    <TileGrid title="Cost">
+    <TileGrid title="Cost" className="cost-results-section">
       <Tile
         label="Session cost"
         value={formatCurrencyValue(sessionCost, currencySymbol)}

@@ -82,7 +82,7 @@ const PlanningResults: React.FC<PlanningResultsProps> = ({
   ) : undefined;
 
   return (
-    <TileGrid title="Planning Results" header={summaryHeader}>
+    <TileGrid title="Planning Results" className="planning-results-section" header={summaryHeader}>
       <Tile
         label="Time to target"
         value={formatDuration(timeToTargetHours, isTargetReachable)}
