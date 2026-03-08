@@ -1,4 +1,5 @@
 import React from "react";
+import Tile from "./Tile";
 
 interface CostResultsProps {
   currencySymbol: string;
@@ -31,38 +32,26 @@ const CostResults: React.FC<CostResultsProps> = ({
     <div className="results-section cost-results-section">
       <h2>Cost</h2>
       <div className="results-grid cost-results-grid">
-        <div className="result-tile">
-          <span>Session cost</span>
-          <strong
-            className={`result-value${sessionCost === null ? " result-value--placeholder" : ""}`}
-          >
-            {formatCurrencyValue(sessionCost, currencySymbol)}
-          </strong>
-        </div>
-        <div className="result-tile">
-          <span>Cost to target</span>
-          <strong
-            className={`result-value${targetCost === null ? " result-value--placeholder" : ""}`}
-          >
-            {formatCurrencyValue(targetCost, currencySymbol)}
-          </strong>
-        </div>
-        <div className="result-tile">
-          <span>Cost to full</span>
-          <strong
-            className={`result-value${fullChargeCost === null ? " result-value--placeholder" : ""}`}
-          >
-            {formatCurrencyValue(fullChargeCost, currencySymbol)}
-          </strong>
-        </div>
-        <div className="result-tile">
-          <span>Cost per 100 km</span>
-          <strong
-            className={`result-value${costPer100Km === null ? " result-value--placeholder" : ""}`}
-          >
-            {formatCurrencyValue(costPer100Km, currencySymbol, " / 100 km")}
-          </strong>
-        </div>
+        <Tile
+          label="Session cost"
+          value={formatCurrencyValue(sessionCost, currencySymbol)}
+          placeholder={sessionCost === null}
+        />
+        <Tile
+          label="Cost to target"
+          value={formatCurrencyValue(targetCost, currencySymbol)}
+          placeholder={targetCost === null}
+        />
+        <Tile
+          label="Cost to full"
+          value={formatCurrencyValue(fullChargeCost, currencySymbol)}
+          placeholder={fullChargeCost === null}
+        />
+        <Tile
+          label="Cost per 100 km"
+          value={formatCurrencyValue(costPer100Km, currencySymbol, " / 100 km")}
+          placeholder={costPer100Km === null}
+        />
       </div>
     </div>
   );

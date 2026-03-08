@@ -1,4 +1,5 @@
 import React from "react";
+import Tile from "./Tile";
 
 interface PlanningResultsProps {
   batteryEnergyToTargetKwh: number;
@@ -82,62 +83,40 @@ const PlanningResults: React.FC<PlanningResultsProps> = ({
         </p>
       )}
       <div className="results-grid planning-results-grid">
-        <div className="result-tile">
-          <span>Time to target</span>
-          <strong
-            className={`result-value${!isTargetReachable ? " result-value--placeholder" : ""}`}
-          >
-            {formatDuration(timeToTargetHours, isTargetReachable)}
-          </strong>
-        </div>
-        <div className="result-tile">
-          <span>Ready at</span>
-          <strong
-            className={`result-value${readyAtLabel === null ? " result-value--placeholder" : ""}`}
-          >
-            {readyAtLabel ?? "—"}
-          </strong>
-        </div>
-        <div className="result-tile">
-          <span>Battery energy</span>
-          <strong className="result-value">{formatEnergy(batteryEnergyToTargetKwh)}</strong>
-        </div>
-        <div className="result-tile">
-          <span>Wall energy</span>
-          <strong className="result-value">{formatEnergy(wallEnergyToTargetKwh)}</strong>
-        </div>
-        <div className="result-tile">
-          <span>Range at target</span>
-          <strong
-            className={`result-value${rangeAtTargetKm === null ? " result-value--placeholder" : ""}`}
-          >
-            {formatRange(rangeAtTargetKm)}
-          </strong>
-        </div>
+        <Tile
+          label="Time to target"
+          value={formatDuration(timeToTargetHours, isTargetReachable)}
+          placeholder={!isTargetReachable}
+        />
+        <Tile
+          label="Ready at"
+          value={readyAtLabel ?? "—"}
+          placeholder={readyAtLabel === null}
+        />
+        <Tile label="Battery energy" value={formatEnergy(batteryEnergyToTargetKwh)} />
+        <Tile label="Wall energy" value={formatEnergy(wallEnergyToTargetKwh)} />
+        <Tile
+          label="Range at target"
+          value={formatRange(rangeAtTargetKm)}
+          placeholder={rangeAtTargetKm === null}
+        />
         {hasDepartureConstraint && (
           <>
-            <div className="result-tile">
-              <span>Ready by departure</span>
-              <strong
-                className={`result-value planning-status ${
-                  isReachableByDeparture ? "planning-status--success" : "planning-status--warning"
-                }`}
-              >
-                {isReachableByDeparture ? "Yes" : "No"}
-              </strong>
-            </div>
-            <div className="result-tile">
-              <span>SoC at departure</span>
-              <strong className="result-value">
-                {formatPercentage(socAtDeparturePercent)}
-              </strong>
-            </div>
-            <div className="result-tile">
-              <span>Shortfall</span>
-              <strong className="result-value">
-                {formatPercentage(socShortfallPercent)}
-              </strong>
-            </div>
+            <Tile
+              label="Ready by departure"
+              value={isReachableByDeparture ? "Yes" : "No"}
+              valueClassName={`planning-status ${
+                isReachableByDeparture ? "planning-status--success" : "planning-status--warning"
+              }`}
+            />
+            <Tile
+              label="SoC at departure"
+              value={formatPercentage(socAtDeparturePercent)}
+            />
+            <Tile
+              label="Shortfall"
+              value={formatPercentage(socShortfallPercent)}
+            />
           </>
         )}
       </div>
