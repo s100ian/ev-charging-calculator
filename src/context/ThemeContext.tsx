@@ -30,6 +30,13 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
     useEffect(() => {
         const root = window.document.documentElement;
         root.setAttribute("data-theme", theme);
+        root.style.colorScheme = theme;
+
+        const themeColorMeta = window.document.querySelector('meta[name="theme-color"]');
+        if (themeColorMeta) {
+            themeColorMeta.setAttribute("content", theme === "dark" ? "#18181b" : "#f9fafb");
+        }
+
         try {
             localStorage.setItem("theme", theme);
         } catch {
