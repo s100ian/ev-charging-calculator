@@ -1,5 +1,13 @@
 import { describe, it, expect } from 'vitest';
-import { calculateEnergyAdded } from './calculations';
+import {
+    calculateCostPer100Km,
+    calculateEnergyAdded,
+    calculateEnergyCost,
+    calculateEnergyToFull,
+    calculateFullChargeWallEnergy,
+    calculateSessionWallEnergy,
+    calculateWallEnergyFromBatteryEnergy,
+} from './calculations';
 
 describe('calculateEnergyAdded', () => {
     const capacity = 100; // 100 kWh
@@ -103,5 +111,57 @@ describe('calculateEnergyAdded', () => {
         // branch is always taken and returns powerNormal * duration = 0.
         const result = calculateEnergyAdded(capacity, 50, volts, 0, 1);
         expect(result).toBeCloseTo(0, 3);
+    });
+});
+
+describe('charging cost helpers', () => {
+    const pricing = { type: 'fixed' as const, pricePerKwh: 0.25 };
+
+    it('calculates energy to full from current SoC', () => {
+        expect(calculateEnergyToFull(72, 50)).toBeCloseTo(36, 3);
+    });
+
+    it('returns 0 energy to full when already at 100%', () => {
+        expect(calculateEnergyToFull(72, 100)).toBe(0);
+    });
+
+    it('treats wall energy as battery energy when efficiency is 1', () => {
+        expect(calculateWallEnergyFromBatteryEnergy(12.5)).toBeCloseTo(12.5, 3);
+    });
+
+    it('converts battery energy to wall energy when efficiency is below 1', () => {
+        expect(calculateWallEnergyFromBatteryEnergy(18, 0.9)).toBeCloseTo(20, 3);
+    });
+
+    it('returns 0 wall energy when efficiency is invalid', () => {
+        expect(calculateWallEnergyFromBatteryEnergy(18, 0)).toBe(0);
+    });
+
+    it('calculates wall energy for a session', () => {
+        expect(calculateSessionWallEnergy(7.36)).toBeCloseTo(7.36, 3);
+    });
+
+    it('calculates wall energy to full from current SoC', () => {
+        expect(calculateFullChargeWallEnergy(72, 50)).toBeCloseTo(36, 3);
+    });
+
+    it('calculates wall energy to full with an efficiency factor', () => {
+        expect(calculateFullChargeWallEnergy(72, 50, 0.9)).toBeCloseTo(40, 3);
+    });
+
+    it('calculates cost for energy', () => {
+        expect(calculateEnergyCost(20, pricing)).toBeCloseTo(5, 3);
+    });
+
+    it('does not produce negative cost for negative energy', () => {
+        expect(calculateEnergyCost(-5, pricing)).toBe(0);
+    });
+
+    it('calculates cost per 100 km from consumption', () => {
+        expect(calculateCostPer100Km(18, pricing)).toBeCloseTo(4.5, 3);
+    });
+
+    it('calculates cost per 100 km with an efficiency factor', () => {
+        expect(calculateCostPer100Km(18, pricing, 0.9)).toBeCloseTo(5, 3);
     });
 });
