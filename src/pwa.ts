@@ -1,6 +1,12 @@
 export interface PwaState {
   updateAvailable: boolean;
   offlineReady: boolean;
+  installPromptReady: boolean;
+}
+
+interface BeforeInstallPromptEvent extends Event {
+  prompt(): Promise<void>;
+  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 }
 
 type Listener = (state: PwaState) => void;
@@ -9,6 +15,21 @@ const listeners = new Set<Listener>();
 const state: PwaState = {
   updateAvailable: false,
   offlineReady: false,
+  installPromptReady: false,
+};
+
+const INSTALL_DISMISSED_KEY = "pwa_install_dismissed_until";
+const DISMISS_DURATION_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
+
+let deferredInstallPrompt: BeforeInstallPromptEvent | null = null;
+
+const isInstallDismissed = () => {
+  try {
+    const until = localStorage.getItem(INSTALL_DISMISSED_KEY);
+    return until !== null && Date.now() < parseInt(until, 10);
+  } catch {
+    return false;
+  }
 };
 
 let waitingWorker: ServiceWorker | null = null;
@@ -51,6 +72,42 @@ export const applyServiceWorkerUpdate = () => {
   const worker = waitingWorker;
   setWaitingWorker(null);
   worker.postMessage({ type: "SKIP_WAITING" });
+};
+
+export const listenForInstallPrompt = () => {
+  if (isInstallDismissed()) return;
+
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e as BeforeInstallPromptEvent;
+    state.installPromptReady = true;
+    emit();
+  });
+
+  window.addEventListener("appinstalled", () => {
+    deferredInstallPrompt = null;
+    state.installPromptReady = false;
+    emit();
+  });
+};
+
+export const installApp = async () => {
+  if (!deferredInstallPrompt) return;
+  await deferredInstallPrompt.prompt();
+  deferredInstallPrompt = null;
+  state.installPromptReady = false;
+  emit();
+};
+
+export const dismissInstallPrompt = () => {
+  deferredInstallPrompt = null;
+  state.installPromptReady = false;
+  try {
+    localStorage.setItem(INSTALL_DISMISSED_KEY, String(Date.now() + DISMISS_DURATION_MS));
+  } catch {
+    // ignore
+  }
+  emit();
 };
 
 export const registerServiceWorker = () => {
