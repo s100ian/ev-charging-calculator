@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import {
   applyServiceWorkerUpdate,
+  dismissInstallPrompt,
   dismissOfflineReady,
+  installApp,
   subscribeToPwaState,
   type PwaState,
 } from "../pwa";
@@ -9,6 +11,7 @@ import {
 const initialState: PwaState = {
   updateAvailable: false,
   offlineReady: false,
+  installPromptReady: false,
 };
 
 function PwaBanner() {
@@ -25,9 +28,10 @@ function PwaBanner() {
   }, []);
 
   const showUpdate = pwaState.updateAvailable && !updateDismissed;
-  const showOfflineReady = pwaState.offlineReady;
+  const showInstall = pwaState.installPromptReady && !showUpdate;
+  const showOfflineReady = pwaState.offlineReady && !showUpdate && !showInstall;
 
-  if (!showUpdate && !showOfflineReady) {
+  if (!showUpdate && !showInstall && !showOfflineReady) {
     return null;
   }
 
@@ -35,11 +39,13 @@ function PwaBanner() {
     <div className="pwa-banner" role="status" aria-live="polite">
       <div className="pwa-banner__content">
         <strong className="pwa-banner__title">
-          {showUpdate ? "Update available" : "Ready offline"}
+          {showUpdate ? "Update available" : showInstall ? "Install EV Charging Calculator" : "Ready offline"}
         </strong>
         <span className="pwa-banner__message">
           {showUpdate
             ? "A new version of EV Charging Calculator is ready to install."
+            : showInstall
+            ? "Add to your home screen for quick access, offline use, and a full-screen experience."
             : "This app can now reopen without a network connection."}
         </span>
       </div>
@@ -51,6 +57,15 @@ function PwaBanner() {
             </button>
             <button className="pwa-banner__button" onClick={() => setUpdateDismissed(true)}>
               Later
+            </button>
+          </>
+        ) : showInstall ? (
+          <>
+            <button className="pwa-banner__button pwa-banner__button--primary" onClick={() => void installApp()}>
+              Install
+            </button>
+            <button className="pwa-banner__button" onClick={dismissInstallPrompt}>
+              Not now
             </button>
           </>
         ) : (
