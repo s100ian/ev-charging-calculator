@@ -19,6 +19,7 @@ interface SliderFieldProps {
   onSliderChange: (value: number) => void;
   onDecrement: () => void;
   onIncrement: () => void;
+  headerAction?: React.ReactNode;
   quickSetLabel?: string;
   quickSetOptions?: SliderQuickSetOption[];
   quickSetGroupTestId?: string;
@@ -38,6 +39,7 @@ const SliderField: React.FC<SliderFieldProps> = ({
   onSliderChange,
   onDecrement,
   onIncrement,
+  headerAction,
   quickSetLabel,
   quickSetOptions,
   quickSetGroupTestId,
@@ -81,6 +83,7 @@ const SliderField: React.FC<SliderFieldProps> = ({
             <span>{label}</span>
             <span className="slider-value">{displayValue}</span>
           </label>
+          {headerAction}
         </div>
         <div className={`slider-controls${hasQuickSetOptions ? " slider-controls--with-presets" : ""}`}>
           <button className="control-button" onClick={onDecrement} type="button">
