@@ -12,6 +12,8 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
+    "verify": "npm run lint && npm test && npm run build",
+    "verify:all": "npm run verify && npm run test:e2e",
     "preview": "vite preview",
     "release": "npm version patch -m \"chore: release v%s\" && git push --follow-tags",
     "prepare": "husky"
