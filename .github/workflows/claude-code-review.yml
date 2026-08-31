@@ -34,18 +34,6 @@ jobs:
       - name: Run Claude Code Review
         id: claude-review
         uses: anthropics/claude-code-action@v1
-        # TEMPORARY DIAGNOSTICS — remove once the SDK startup crash is resolved.
-        # The job currently dies ~2s in with is_error:true, num_turns:1,
-        # total_cost_usd:0 and an empty modelUsage, i.e. the Claude Code process
-        # crashes before it ever reaches the API. The action hides the real
-        # message behind show_full_output:false, so the log only reports
-        # "result is_error:true" with no cause. These two env vars plus
-        # show_full_output surface the underlying error. Note the action refuses
-        # to run when this file differs from the copy on the default branch, so
-        # this can only take effect once merged.
-        env:
-          DEBUG_CLAUDE_AGENT_SDK: '1'
-          CLAUDE_CODE_DEBUG_LOGS_DIR: ${{ runner.temp }}/claude-debug
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           plugin_marketplaces: 'https://github.com/anthropics/claude-code.git'
@@ -54,17 +42,4 @@ jobs:
           # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
           # or https://code.claude.com/docs/en/cli-reference for available options
           claude_args: '--model claude-opus-5'
-          show_full_output: true
-
-      # Also TEMPORARY. Upstream reports of this crash note the inline output can
-      # itself be truncated or mangled, so keep the on-disk SDK logs as a
-      # fallback. Short retention because this is a public repository.
-      - name: Upload Claude Code SDK debug logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: claude-code-sdk-debug-logs
-          path: ${{ runner.temp }}/claude-debug
-          if-no-files-found: ignore
-          retention-days: 7
 
